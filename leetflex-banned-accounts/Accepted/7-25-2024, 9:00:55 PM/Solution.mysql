@@ -1,0 +1,11 @@
+// https://leetcode.com/problems/leetflex-banned-accounts
+
+SELECT DISTINCT s.account_id
+    -- s.login, s.logout
+    -- , 'a'
+    -- , e.login, e.logout
+FROM LogInfo s
+INNER JOIN LogInfo e ON s.account_id = e.account_id 
+                    AND s.ip_address != e.ip_address 
+                    AND e.login BETWEEN s.login AND s.logout
+-- WHERE s.account_id IN (1, 4)

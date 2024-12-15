@@ -1,0 +1,46 @@
+// https://leetcode.com/problems/grand-slam-titles
+
+SELECT player_id
+    , player_name
+    , SUM(num_titles) AS grand_slams_count
+FROM (
+    SELECT p.player_id
+        , p.player_name
+        , COUNT(*) AS num_titles
+    FROM Championships c
+    INNER JOIN Players p ON c.Wimbledon = p.player_id
+    GROUP BY p.player_id
+        , p.player_name
+
+    UNION ALL
+
+    SELECT p.player_id
+        , p.player_name
+        , COUNT(*) AS num_titles
+    FROM Championships c
+    INNER JOIN Players p ON c.Fr_open = p.player_id
+    GROUP BY p.player_id
+        , p.player_name
+
+    UNION ALL
+
+    SELECT p.player_id
+        , p.player_name
+        , COUNT(*) AS num_titles
+    FROM Championships c
+    INNER JOIN Players p ON c.US_open = p.player_id
+    GROUP BY p.player_id
+        , p.player_name
+
+    UNION ALL
+
+    SELECT p.player_id
+        , p.player_name
+        , COUNT(*) AS num_titles
+    FROM Championships c
+    INNER JOIN Players p ON c.Au_open = p.player_id
+    GROUP BY p.player_id
+        , p.player_name
+) a
+GROUP BY  player_id
+    , player_name;

@@ -1,0 +1,22 @@
+// https://leetcode.com/problems/restaurant-growth
+
+# Write your MySQL query statement below
+WITH daily_sales AS (
+    SELECT visited_on
+        , SUM(amount) AS amount
+    FROM Customer
+    GROUP BY visited_on
+)
+
+SELECT visited_on
+    , amount
+    , average_amount
+FROM (
+    SELECT visited_on
+        , SUM(amount) OVER (ORDER BY visited_on RANGE INTERVAL 6 DAY PRECEDING) AS amount
+        , ROUND(AVG(amount) OVER (ORDER BY visited_on RANGE INTERVAL 6 DAY PRECEDING), 2) AS average_amount
+        , COUNT(*) OVER (ORDER BY visited_on RANGE INTERVAL 6 DAY PRECEDING) AS num_days
+    FROM daily_sales
+) a
+WHERE num_days = 7
+ORDER BY visited_on

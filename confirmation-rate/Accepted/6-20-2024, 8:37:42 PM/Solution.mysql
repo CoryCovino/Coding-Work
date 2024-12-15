@@ -1,0 +1,30 @@
+// https://leetcode.com/problems/confirmation-rate
+
+# Write your MySQL query statement below
+# Number confirmed messages / total # of requested confirm messages
+# Write your MySQL query statement below
+# Number confirmed messages / total # of requested confirm messages
+
+WITH confirmed_messages AS (
+    SELECT user_id
+        , COUNT(*) AS confirms
+    FROM Confirmations
+    WHERE action = 'confirmed'
+    GROUP BY user_id
+
+), total_messages AS (
+    SELECT user_id
+        , COUNT(*) AS totals
+    FROM Confirmations
+    GROUP BY user_id
+)
+
+SELECT s.user_id
+    , CASE WHEN cm.confirms != 0
+            AND tm.totals != 0
+            THEN ROUND(cm.confirms / tm.totals, 2)
+            ELSE 0
+             END AS confirmation_rate
+FROM Signups s
+LEFT OUTER JOIN confirmed_messages cm ON s.user_id = cm.user_id
+LEFT OUTER JOIN total_messages tm ON s.user_id = tm.user_id

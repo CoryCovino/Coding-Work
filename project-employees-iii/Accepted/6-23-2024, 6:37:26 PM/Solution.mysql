@@ -1,0 +1,17 @@
+// https://leetcode.com/problems/project-employees-iii
+
+# Write your MySQL query statement below
+WITH max_project_years AS (
+    SELECT p.project_id
+        , MAX(e.experience_years) AS exp_years
+    FROM Project p
+    INNER JOIN Employee e ON p.employee_id = e.employee_id
+    GROUP BY p.project_id    
+)
+
+SELECT m.project_id
+    , e.employee_id
+FROM Project p
+INNER JOIN max_project_years m ON p.project_id = m.project_id
+INNER JOIN Employee e ON p.employee_id = e.employee_id
+                     AND m.exp_years = e.experience_years

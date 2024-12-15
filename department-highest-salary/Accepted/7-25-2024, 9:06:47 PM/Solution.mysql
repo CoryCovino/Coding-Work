@@ -1,0 +1,16 @@
+// https://leetcode.com/problems/department-highest-salary
+
+WITH max_salary AS (
+    SELECT departmentId
+        , MAX(salary) AS salary
+    FROM Employee e
+    GROUP BY departmentId
+)
+
+SELECT d.name AS Department
+    , e.name AS Employee
+    , ms.salary AS Salary
+FROM Employee e
+INNER JOIN max_salary ms ON e.departmentId = ms.departmentId
+                        AND e.salary = ms.salary
+INNER JOIN Department d ON e.departmentId = d.id

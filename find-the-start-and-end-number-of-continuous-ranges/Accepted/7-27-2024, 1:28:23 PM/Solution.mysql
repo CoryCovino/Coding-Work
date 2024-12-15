@@ -1,0 +1,19 @@
+// https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges
+
+-- Get value and previous value on one line
+-- Group the values so that if current - previous = 1, then 1 else 0
+WITH comp_data AS (
+    SELECT log_id
+        , SUM(CASE WHEN prev_log_id >= log_id - 1 THEN 0 ELSE 1 END) OVER (ORDER BY log_id) AS seq
+    FROM (
+        SELECT log_id
+            , LAG(log_id, 1) OVER (ORDER BY log_id) AS prev_log_id
+        FROM Logs
+    ) a
+)
+
+SELECT MIN(log_id) AS start_id
+    , MAX(log_id) AS end_id
+FROM comp_data
+GROUP BY seq
+;

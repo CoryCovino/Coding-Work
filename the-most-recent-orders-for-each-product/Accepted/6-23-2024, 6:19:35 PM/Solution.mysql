@@ -1,0 +1,19 @@
+// https://leetcode.com/problems/the-most-recent-orders-for-each-product
+
+# Write your MySQL query statement below
+WITH max_date AS (
+    SELECT o.product_id
+        , MAX(o.order_date) AS order_date
+    FROM Orders o
+    GROUP BY o.product_id
+)
+
+SELECT p.product_name
+    , o.product_id
+    , o.order_id
+    , o.order_date
+FROM Orders o
+INNER JOIN max_date m ON o.product_id = m.product_id
+                     AND o.order_date = m.order_date
+INNER JOIN Products p ON o.product_id = p.product_id
+ORDER BY p.product_name, o.product_id, o.order_id

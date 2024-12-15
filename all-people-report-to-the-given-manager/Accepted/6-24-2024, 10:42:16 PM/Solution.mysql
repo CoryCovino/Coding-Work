@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/all-people-report-to-the-given-manager
+
+# Write your MySQL query statement below
+SELECT e.employee_id
+FROM Employees e
+WHERE e.employee_id <> e.manager_id
+  AND e.manager_id = 1
+
+UNION
+
+SELECT e.employee_id
+FROM Employees e
+INNER JOIN Employees l1 ON e.manager_id = l1.employee_id
+WHERE e.employee_id <> e.manager_id
+  AND l1.manager_id = 1
+
+UNION
+
+SELECT e.employee_id
+FROM Employees e
+INNER JOIN Employees l1 ON e.manager_id = l1.employee_id
+INNER JOIN Employees l2 ON l1.manager_id = l2.employee_id
+WHERE e.employee_id <> e.manager_id
+  AND l2.manager_id = 1

@@ -1,0 +1,8 @@
+// https://leetcode.com/problems/warehouse-manager
+
+# Write your MySQL query statement below
+SELECT w.name AS warehouse_name
+    , SUM(w.units * p.Width * p.Length * p.Height) AS volume
+FROM Products p
+INNER JOIN Warehouse w ON p.product_id = w.product_id
+GROUP BY w.name

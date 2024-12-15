@@ -1,0 +1,33 @@
+// https://leetcode.com/problems/tree-node
+
+WITH root_node AS (
+    SELECT id, 'Root' AS type
+    FROM Tree
+    WHERE p_id IS NULL
+
+), inner_node AS (
+    SELECT DISTINCT i.id, 'Inner'
+    FROM Tree i
+    INNER JOIN Tree child ON i.id = child.p_id
+    WHERE i.p_id IS NOT NULL
+
+), leaf_node AS (
+    SELECT id, 'Leaf'
+    FROM Tree
+    WHERE id NOT IN (SELECT id FROM root_node UNION SELECT id FROM inner_node)
+
+)
+
+SELECT *
+FROM root_node
+
+UNION
+
+SELECT *
+FROM inner_node
+
+UNION
+
+SELECT *
+FROM leaf_node
+;

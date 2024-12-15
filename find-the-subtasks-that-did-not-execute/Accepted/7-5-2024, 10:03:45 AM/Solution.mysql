@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/find-the-subtasks-that-did-not-execute
+
+# Write your MySQL query statement below
+WITH RECURSIVE counts AS (
+    SELECT task_id
+        , subtasks_count
+    FROM Tasks
+
+    UNION ALL
+    
+    SELECT task_id
+        , subtasks_count - 1
+    FROM counts
+    WHERE subtasks_count > 1
+)
+
+SELECT DISTINCT c.task_id
+    , c.subtasks_count AS subtask_id
+FROM counts c
+LEFT OUTER JOIN Executed e ON c.task_id = e.task_id
+                          AND c.subtasks_count = e.subtask_id
+WHERE e.task_id IS NULL
+ORDER BY c.task_id
+    , c.subtasks_count

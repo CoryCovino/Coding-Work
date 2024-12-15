@@ -1,0 +1,27 @@
+// https://leetcode.com/problems/employees-with-missing-information
+
+-- # Write your MySQL query statement below
+-- SELECT e.employee_id
+--     , e.*
+--     , s.*
+-- FROM Employees e
+-- LEFT OUTER JOIN Salaries s ON e.employee_id = s.employee_id
+-- -- WHERE e.name IS NULL
+-- --    OR s.salary IS NULL
+-- ORDER BY e.employee_id;
+
+SELECT e.employee_id
+FROM (
+    SELECT employee_id
+    FROM Salaries s
+
+    UNION
+
+    SELECT employee_id
+    FROM Employees e
+) e
+LEFT OUTER JOIN Salaries s ON e.employee_id = s.employee_id
+LEFT OUTER JOIN Employees e2 ON e.employee_id = e2.employee_id
+WHERE s.salary IS NULL
+   OR e2.employee_id IS NULL
+ORDER BY e.employee_id

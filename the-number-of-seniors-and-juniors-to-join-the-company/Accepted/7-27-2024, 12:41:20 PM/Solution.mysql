@@ -1,0 +1,36 @@
+// https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company
+
+# Write your MySQL query statement below
+WITH seniors AS (
+    SELECT *
+        , SUM(salary) OVER (ORDER BY salary) AS cumulative_salary
+    FROM Candidates    
+    WHERE experience = 'Senior'
+    ORDER BY salary
+
+), hired_seniors AS (
+    SELECT *
+    FROM seniors
+    WHERE cumulative_salary <= 70000
+
+), juniors AS (
+    SELECT *
+        , SUM(salary) OVER (ORDER BY salary) AS cumulative_salary
+    FROM Candidates
+    WHERE experience = 'Junior'
+    ORDER BY salary
+
+), hired_juniors AS (
+    SELECT *
+    FROM juniors
+    WHERE cumulative_salary <= (SELECT CASE WHEN COUNT(*) = 0 THEN 70000 ELSE 70000 - MAX(cumulative_salary) END FROM hired_seniors)
+)
+
+SELECT 'Senior' AS experience
+    , COUNT(*) AS accepted_candidates
+FROM hired_seniors
+UNION
+SELECT 'Junior' AS experience
+    , COUNT(*) AS accepted_candidates
+FROM hired_juniors
+

@@ -1,0 +1,11 @@
+// https://leetcode.com/problems/grand-slam-titles
+
+# Write your MySQL query statement below
+SELECT p.player_id
+    , p.player_name
+    , SUM(player_id=Wimbledon) + SUM(player_id=Fr_open) + SUM(player_id=US_open) + SUM(player_id=Au_open) AS grand_slams_count
+FROM Championships c
+LEFT OUTER JOIN Players p ON p.player_id IN (Wimbledon, Fr_open, US_open, Au_open)
+GROUP BY p.player_id
+    , p.player_name
+;

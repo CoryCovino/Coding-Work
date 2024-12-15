@@ -1,0 +1,21 @@
+// https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer
+
+WITH cust_orders AS (
+    SELECT customer_id
+        , product_id
+        , COUNT(*) AS num_orders
+    FROM Orders
+    GROUP BY customer_id
+        , product_id
+)
+
+SELECT a.customer_id
+    , a.product_id
+    , p.product_name
+FROM (
+    SELECT *
+        , DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY num_orders DESC) AS order_rank
+    FROM cust_orders
+) a
+INNER JOIN Products p ON a.product_id = p.product_id
+WHERE order_rank = 1

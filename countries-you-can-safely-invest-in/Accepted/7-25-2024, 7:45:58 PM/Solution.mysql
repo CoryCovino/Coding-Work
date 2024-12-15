@@ -1,0 +1,8 @@
+// https://leetcode.com/problems/countries-you-can-safely-invest-in
+
+SELECT c.name AS country
+FROM Person p
+INNER JOIN Country c ON LEFT(p.phone_number, 3) = c.country_code
+INNER JOIN Calls ca ON p.id = ca.caller_id OR p.id = ca.callee_id
+GROUP BY c.name
+HAVING AVG(ca.duration) > (SELECT AVG(duration) FROM Calls)

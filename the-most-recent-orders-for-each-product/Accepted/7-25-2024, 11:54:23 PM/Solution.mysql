@@ -1,0 +1,18 @@
+// https://leetcode.com/problems/the-most-recent-orders-for-each-product
+
+
+SELECT 
+    p.product_name
+    , p.product_id
+    , o.order_id
+    , o.order_date
+FROM Orders o
+INNER JOIN (
+    SELECT product_id
+        , MAX(order_date) AS order_date
+    FROM Orders
+    GROUP BY product_id
+) mp ON o.product_id = mp.product_id
+    AND o.order_date = mp.order_date
+INNER JOIN Products p ON o.product_id = p.product_id
+ORDER BY p.product_name, p.product_id, o.order_id

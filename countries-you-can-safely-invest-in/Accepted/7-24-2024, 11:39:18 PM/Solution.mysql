@@ -1,0 +1,26 @@
+// https://leetcode.com/problems/countries-you-can-safely-invest-in
+
+SELECT name AS country
+FROM (
+    SELECT c.name
+        , COUNT(*) AS num_calls
+        , SUM(ca.duration) AS duration
+    FROM Country c
+    INNER JOIN Person p ON c.country_code = LEFT(p.phone_number, 3)
+    INNER JOIN Calls ca ON p.id = ca.caller_id
+    GROUP BY c.name
+
+    UNION ALL 
+
+    SELECT c.name
+        , COUNT(*) AS num_calls
+        , SUM(ca.duration) AS duration
+    FROM Country c
+    INNER JOIN Person p ON c.country_code = LEFT(p.phone_number, 3)
+    INNER JOIN Calls ca ON p.id = ca.callee_id
+    GROUP BY c.name
+) a
+GROUP BY name
+HAVING SUM(duration) / SUM(num_calls) > (SELECT AVG(duration) AS duration FROM Calls);
+
+

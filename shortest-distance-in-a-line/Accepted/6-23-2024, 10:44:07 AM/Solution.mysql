@@ -1,0 +1,12 @@
+// https://leetcode.com/problems/shortest-distance-in-a-line
+
+# Write your MySQL query statement below
+-- WITH sorted_point AS (
+--     SELECT *
+--     FROM Point
+--     ORDER BY x
+-- )
+
+SELECT MIN(a.x - b.x) AS shortest
+FROM Point a, Point b
+WHERE a.x > b.x;

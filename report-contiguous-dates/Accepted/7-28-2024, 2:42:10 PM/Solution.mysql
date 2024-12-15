@@ -1,0 +1,57 @@
+// https://leetcode.com/problems/report-contiguous-dates
+
+WITH outputs AS (
+    SELECT c_date
+        , period_state
+        , SUM(CASE WHEN prev_date >= DATE_ADD(c_date, INTERVAL -1 day) THEN 0 ELSE 1 END) OVER (ORDER BY c_date) AS seq
+    FROM (
+        SELECT 'failed' AS period_state
+            , fail_date AS c_date
+            , LAG(fail_date, 1) OVER (ORDER BY fail_date) AS prev_date
+        FROM Failed
+
+        UNION ALL
+
+        SELECT 'succeeded' AS period_state
+            , success_date AS c_date
+            , LAG(success_date, 1) OVER (ORDER BY success_date) AS prev_date
+        FROM Succeeded
+    ) a
+)
+
+SELECT period_state
+    , MIN(c_date) AS start_date
+    , MAX(c_date) AS end_date
+FROM outputs
+WHERE c_date BETWEEN '2019-01-01' AND '2019-12-31'
+GROUP BY period_state, seq
+-- ), s AS (
+--     SELECT c_date
+--         , SUM(CASE WHEN prev_date >= DATE_ADD(c_date, INTERVAL -1 day) THEN 0 ELSE 1 END) OVER (ORDER BY c_date) AS seq
+--     FROM (
+--         SELECT success_date AS c_date
+--             , LAG(success_date, 1) OVER (ORDER BY success_date) AS prev_date
+--         FROM Succeeded
+--         WHERE success_date >= '2019-01-01'
+--     ) a
+-- )
+
+-- SELECT period_state
+--     , start_date
+--     , end_date
+-- FROM (
+--     SELECT 'failed' AS period_state
+--         , MIN(c_date) AS start_date
+--         , MAX(c_date) AS end_date
+--     FROM fails
+--     GROUP BY seq
+
+--     UNION ALL 
+
+--     SELECT 'succeeded' AS period_state
+--         , MIN(c_date) AS start_date
+--         , MAX(c_date) AS end_date
+--     FROM s
+--     GROUP BY seq
+-- ) a
+-- ORDER BY start_date

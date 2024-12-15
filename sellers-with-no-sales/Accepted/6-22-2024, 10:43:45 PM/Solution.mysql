@@ -1,0 +1,9 @@
+// https://leetcode.com/problems/sellers-with-no-sales
+
+# Write your MySQL query statement below
+SELECT s.seller_name
+FROM Seller s
+LEFT JOIN Orders o ON s.seller_id = o.seller_id
+                  AND sale_date >= '2020-01-01' AND sale_date < '2021-01-01'
+WHERE o.seller_id IS NULL
+ORDER BY s.seller_name

@@ -1,0 +1,7 @@
+# Ignore macOS system files
+.DS_Store
+
+# Ignore directories named "Wrong Answer"
+**/Wrong Answer/
+**/Runtime Exception/
+**/Runtime Exceptions/

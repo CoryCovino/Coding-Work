@@ -1,0 +1,27 @@
+// https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer
+
+# Write your MySQL query statement below
+WITH total_purchased AS (
+    SELECT o.customer_id
+        , o.product_id
+        , COUNT(*) AS num_purchased
+    FROM Orders o
+    GROUP BY o.customer_id
+        , o.product_id
+    HAVING COUNT(*) >= 1
+
+), max_purchases AS (
+    SELECT customer_id
+        , MAX(num_purchased) AS num_purchased
+    FROM total_purchased
+    GROUP BY customer_id
+)
+
+SELECT tp.customer_id
+    , tp.product_id
+    , p.product_name
+FROM total_purchased tp
+INNER JOIN max_purchases mp ON tp.customer_id = mp.customer_id
+                           AND tp.num_purchased = mp.num_purchased
+INNER JOIN Products p ON tp.product_id = p.product_id
+ORDER BY tp.customer_id, tp.product_id

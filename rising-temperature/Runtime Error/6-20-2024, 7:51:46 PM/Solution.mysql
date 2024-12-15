@@ -1,0 +1,11 @@
+// https://leetcode.com/problems/rising-temperature
+
+# Write your MySQL query statement below
+SELECT t.id
+FROM Weather t
+INNER JOIN weather y ON t.recordDate = y.recordDate + 1
+WHERE t.temperature > y.temperature;
+
+SELECT *
+FROM weather
+WHERE id IN (80, 81, 82)

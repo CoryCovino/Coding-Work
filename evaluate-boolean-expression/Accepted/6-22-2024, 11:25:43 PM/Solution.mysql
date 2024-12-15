@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/evaluate-boolean-expression
+
+# Write your MySQL query statement below
+SELECT e.left_operand
+    , e.operator
+    , e.right_operand
+    , CASE WHEN e.operator = '>'
+            AND v_left.value > v_right.value
+            THEN 'true'
+           
+           WHEN e.operator = '<'
+            AND v_left.value < v_right.value
+           THEN 'true'
+
+           WHEN e.operator = '='
+            AND v_left.value = v_right.value
+           THEN 'true'
+
+           ELSE 'false'
+
+           END AS value
+FROM Expressions e
+LEFT OUTER JOIN Variables v_left ON e.left_operand = v_left.name
+LEFT OUTER JOIN Variables v_right ON e.right_operand = v_right.name

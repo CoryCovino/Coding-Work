@@ -1,0 +1,12 @@
+// https://leetcode.com/problems/page-recommendations
+
+WITH friends AS (
+    SELECT *
+    FROM Friendship
+    WHERE user1_id = 1 OR user2_id = 1
+)
+
+SELECT DISTINCT l.page_id AS recommended_page
+FROM Likes l
+INNER JOIN friends f ON l.user_id = f.user_id
+WHERE page_id NOT IN (SELECT page_id FROM Likes WHERE user_id = 1)

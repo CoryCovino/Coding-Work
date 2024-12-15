@@ -1,0 +1,19 @@
+// https://leetcode.com/problems/highest-grade-for-each-student
+
+# Write your MySQL query statement below
+WITH max_grade AS (
+    SELECT student_id
+        , MAX(grade) AS grade
+    FROM Enrollments
+    GROUP BY student_id
+)
+
+SELECT e.student_id
+    , MIN(e.course_id) AS course_id
+    , mg.grade
+FROM Enrollments e
+INNER JOIN max_grade mg ON e.student_id = mg.student_id
+                       AND e.grade = mg.grade
+GROUP BY e.student_id
+    , e.grade
+ORDER BY e.student_id

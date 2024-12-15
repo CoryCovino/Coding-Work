@@ -1,0 +1,12 @@
+// https://leetcode.com/problems/find-the-team-size
+
+# Write your MySQL query statement below
+SELECT e.employee_id
+    , t.team_size
+FROM Employee e
+INNER JOIN (
+    SELECT team_id
+        , COUNT(*) AS team_size
+    FROM Employee
+    GROUP BY team_id
+) t ON e.team_id = t.team_id

@@ -1,0 +1,10 @@
+// https://leetcode.com/problems/rising-temperature
+
+# Write your MySQL query statement below
+SELECT t.id
+    -- , t.recordDate
+    -- , t.temperature
+    -- , y.temperature
+FROM Weather t
+INNER JOIN (SELECT date_add(recordDate, interval 1 day) as recordDate, temperature FROM Weather) as y ON t.recordDate = y.recordDate
+WHERE t.temperature > y.temperature;

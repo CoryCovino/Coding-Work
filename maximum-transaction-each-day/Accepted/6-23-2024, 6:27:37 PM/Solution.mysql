@@ -1,0 +1,15 @@
+// https://leetcode.com/problems/maximum-transaction-each-day
+
+# Write your MySQL query statement below
+WITH max_amount AS (
+    SELECT day
+        , MAX(amount) AS amount
+    FROM Transactions
+    GROUP BY day
+)
+
+SELECT t.transaction_id
+FROM Transactions t
+INNER JOIN max_amount a ON t.day = a.day
+                       AND t.amount = a.amount
+ORDER BY t.transaction_id

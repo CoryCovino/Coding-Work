@@ -1,0 +1,13 @@
+// https://leetcode.com/problems/maximum-transaction-each-day
+
+SELECT DISTINCT t.transaction_id
+FROM Transactions t
+INNER JOIN (
+    SELECT day
+        , MAX(amount) AS amount
+    FROM Transactions
+    GROUP BY day
+) max_values ON t.day = max_values.day
+            AND t.amount = max_values.amount
+ORDER BY t.transaction_id;
+    

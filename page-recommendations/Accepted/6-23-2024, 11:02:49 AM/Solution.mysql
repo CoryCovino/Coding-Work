@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/page-recommendations
+
+# Write your MySQL query statement below
+SELECT DISTINCT page_id AS recommended_page
+FROM (
+    SELECT f.user2_id AS user_id
+        , l.page_id
+    FROM Friendship f
+    INNER JOIN Likes l ON f.user2_id = l.user_id
+    WHERE f.user1_id = 1
+
+    UNION ALL
+
+    SELECT f.user1_id
+        , l.page_id
+    FROM Friendship f
+    INNER JOIN Likes l ON f.user1_id = l.user_id
+    WHERE f.user2_id = 1
+) a
+WHERE a.page_id NOT IN (
+    SELECT page_id
+    FROM Likes
+    WHERE user_id = 1
+)

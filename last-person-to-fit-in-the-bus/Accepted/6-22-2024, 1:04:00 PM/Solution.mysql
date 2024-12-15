@@ -1,0 +1,16 @@
+// https://leetcode.com/problems/last-person-to-fit-in-the-bus
+
+SELECT q.person_name
+FROM Queue q
+WHERE q.turn = (
+    SELECT MAX(q.turn) AS max_turn
+    FROM Queue q
+    INNER JOIN (
+        SELECT turn
+            , SUM(weight) OVER (ORDER BY turn) AS total_weight
+        FROM Queue
+        ORDER BY turn
+    ) a ON q.turn = a.turn
+    WHERE a.total_weight <= 1000
+);
+

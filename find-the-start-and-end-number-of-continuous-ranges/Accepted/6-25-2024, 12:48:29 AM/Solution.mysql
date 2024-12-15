@@ -1,0 +1,23 @@
+// https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges
+
+# Write your MySQL query statement below
+WITH log_groups AS (
+    SELECT log_id
+        , SUM(CASE WHEN prev_value >= log_id - 1 THEN 0 ELSE 1 END) OVER (ORDER BY log_id) AS grp
+    FROM (
+        SELECT l.log_id
+            , LAG(l.log_id, 1) OVER (ORDER BY log_id) AS prev_value
+        FROM Logs l
+    ) a
+) 
+
+SELECT start_id
+    , end_id
+FROM (
+    SELECT grp
+        , MIN(log_id) AS start_id
+        , MAX(log_id) AS end_id
+    FROM log_groups
+    GROUP BY grp
+) a
+ORDER BY start_id

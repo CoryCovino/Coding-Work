@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/team-scores-in-football-tournament
+
+# Write your MySQL query statement below
+WITH combined_totals AS (
+    SELECT host_team AS team
+        , SUM(CASE WHEN host_goals > guest_goals
+                THEN 3
+                WHEN host_goals = guest_goals
+                THEN 1
+                ELSE 0
+                    END) AS points
+    FROM Matches
+    GROUP BY host_team
+
+    UNION ALL
+
+    SELECT guest_team
+        , SUM(CASE WHEN guest_goals > host_goals
+                THEN 3
+                WHEN guest_goals = host_goals
+                THEN 1
+                ELSE 0
+                    END) AS guest_points
+    FROM Matches
+    GROUP BY guest_team
+)
+
+SELECT t.team_id
+    , t.team_name
+    , IFNULL(SUM(c.points), 0) AS num_points
+FROM Teams t
+LEFT OUTER JOIN combined_totals c ON c.team = t.team_id
+GROUP BY t.team_id
+    , t.team_name
+ORDER BY IFNULL(SUM(c.points), 0) DESC, t.team_id;

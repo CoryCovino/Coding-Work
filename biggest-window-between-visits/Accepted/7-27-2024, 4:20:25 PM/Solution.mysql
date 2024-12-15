@@ -1,0 +1,10 @@
+// https://leetcode.com/problems/biggest-window-between-visits
+
+SELECT user_id
+    , MAX(diffs) AS biggest_window
+FROM (
+    SELECT user_id
+        , DATEDIFF(IFNULL(LAG(visit_date, 1) OVER (PARTITION BY user_id ORDER BY visit_date DESC), '2021-1-1'), visit_date) AS diffs
+    FROM UserVisits
+) a
+GROUP BY user_id

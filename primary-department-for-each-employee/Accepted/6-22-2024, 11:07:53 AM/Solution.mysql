@@ -1,0 +1,25 @@
+// https://leetcode.com/problems/primary-department-for-each-employee
+
+WITH one_department AS (
+    SELECT Employee.employee_id
+        , Employee.department_id
+    FROM Employee 
+    INNER JOIN (
+        SELECT employee_id
+        FROM Employee
+        GROUP BY employee_id
+        HAVING COUNT(department_id) = 1
+    ) e ON Employee.employee_id = e.employee_id
+
+), primary_department AS (
+    SELECT employee_id
+        , department_id
+    FROM Employee
+    WHERE primary_flag = 'Y'
+)
+
+SELECT *
+FROM one_department
+UNION
+SELECT *
+FROM primary_department;

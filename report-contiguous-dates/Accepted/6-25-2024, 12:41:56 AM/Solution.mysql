@@ -1,0 +1,36 @@
+// https://leetcode.com/problems/report-contiguous-dates
+
+# Write your MySQL query statement below
+WITH group_data AS (
+    SELECT period_state
+        , process_date
+        , previous_date
+        , SUM(CASE WHEN previous_date >= DATE_ADD(process_date, INTERVAL -1 DAY) THEN 0 ELSE 1 END) OVER (ORDER BY process_date) AS grp
+    FROM (
+        SELECT 'succeeded' AS period_state
+            , success_date AS process_date
+            , LAG(success_date, 1) OVER (ORDER BY success_date) AS previous_date
+        FROM Succeeded
+
+        UNION ALL
+
+        SELECT 'failed' AS period_state
+            , fail_date
+            , LAG(fail_date, 1) OVER (ORDER BY fail_date) AS previous_date
+        FROM Failed
+    ) a
+)
+
+SELECT period_state
+    , start_date
+    , end_date
+FROM (
+    SELECT grp
+        , period_state
+        , MIN(process_date) AS start_date
+        , MAX(process_date) aS end_date
+    FROM group_data
+    WHERE process_date BETWEEN '2019-01-01' AND '2019-12-31'
+    GROUP BY grp, period_state
+) a
+;

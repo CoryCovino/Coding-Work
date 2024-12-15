@@ -1,0 +1,17 @@
+// https://leetcode.com/problems/queries-quality-and-percentage
+
+# Write your MySQL query statement below
+WITH totals AS (
+    SELECT q.query_name
+        , SUM(q.rating / q.position) AS total_quality
+        , SUM(CASE WHEN q.rating < 3 THEN 1 ELSE 0 END) AS num_poor_queries
+        , COUNT(*) AS total_queries
+    FROM Queries q
+    GROUP BY q.query_name
+)
+
+SELECT query_name
+    , ROUND(total_quality / total_queries, 2) AS quality
+    , ROUND((num_poor_queries / total_queries) * 100, 2) AS poor_query_percentage
+FROM totals
+WHERE query_name IS NOT NULL

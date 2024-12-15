@@ -1,0 +1,65 @@
+// https://leetcode.com/problems/tree-node
+
+# Write your MySQL query statement below
+SELECT id
+    , 'Root' AS type
+FROM Tree
+WHERE p_id IS NULL
+
+UNION
+
+SELECT t.id
+    , 'Inner'
+FROM Tree t
+INNER JOIN Tree i ON t.id = i.p_id
+WHERE t.p_id IS NOT NULL
+
+UNION
+
+SELECT t.id
+    , 'Leaf'
+FROM Tree t
+LEFT OUTER JOIN Tree l ON t.id = l.p_id
+WHERE t.p_id IS NOT NULL
+  AND l.p_id IS NULL
+
+-- WITH root_node AS (
+--     SELECT id
+--     FROM Tree
+--     WHERE p_id IS NULL
+    
+-- ), leaf_node AS (
+--     SELECT id
+--     FROM Tree t
+--     WHERE id NOT IN (SELECT p_id FROM Tree WHERE p_id IS NOT NULL)
+--       AND t.p_id IS NOT NULL
+
+-- ), inner_node AS (
+--     SELECT DISTINCT t.id
+--     FROM Tree t
+--     WHERE id NOT IN (
+--         SELECT id FROM leaf_node
+--         UNION
+--         SELECT id FROM root_node
+--     )
+-- )
+
+-- SELECT id
+--     , type
+-- FROM (
+--     SELECT id, 'Inner' AS type
+--     FROM inner_node
+
+--     UNION
+
+--     SELECT id, 'Root'
+--     FROM root_node
+
+--     UNION
+
+--     SELECT id, 'Leaf'
+--     FROM leaf_node
+
+-- ) a
+-- ORDER BY id;
+

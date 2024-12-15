@@ -1,0 +1,26 @@
+// https://leetcode.com/problems/find-the-quiet-students-in-all-exams
+
+# Write your MySQL query statement below
+WITH exam_scores AS (
+    SELECT exam_id
+        , MAX(score) AS max_score
+        , MIN(score) AS min_score
+    FROM Exam e
+    GROUP BY exam_id
+) 
+
+SELECT DISTINCT e.student_id
+    , s.student_name
+FROM Exam e
+INNER JOIN Student s ON e.student_id = s.student_id
+WHERE e.student_id NOT IN (
+    SELECT e.student_id
+    FROM Exam e
+    INNER JOIN exam_scores em ON e.exam_id = em.exam_id
+                            AND (e.score = em.max_score
+                            OR e.score = em.min_score)
+    INNER JOIN exam_scores el ON e.exam_id = el.exam_id
+                            AND (e.score != el.max_score
+                            OR e.score != el.min_score)
+)
+ORDER BY e.student_id;
