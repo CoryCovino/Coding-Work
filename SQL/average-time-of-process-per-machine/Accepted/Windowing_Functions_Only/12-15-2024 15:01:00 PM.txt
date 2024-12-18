@@ -1,0 +1,4 @@
+SELECT DISTINCT machine_id
+    , ROUND(SUM(CASE WHEN activity_type = 'start' THEN -timestamp ELSE timestamp END) OVER (PARTITION BY machine_id) / COUNT(*) OVER (PARTITION BY machine_id) * 2, 3) AS processing_time
+FROM Activity
+;

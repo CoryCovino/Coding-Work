@@ -1,0 +1,14 @@
+SELECT person_name
+FROM (
+    SELECT
+        q1.person_name,
+        q1.weight,
+        1000 - SUM(q2.weight) AS total_weight
+    FROM Queue q1
+    JOIN Queue q2 ON q2.turn <= q1.turn
+    GROUP BY q1.person_name, q1.weight, q1.turn
+    ORDER BY q1.turn, 1000 - SUM(q2.weight)
+) a
+WHERE total_weight >= 0
+ORDER BY total_weight
+LIMIT 1
