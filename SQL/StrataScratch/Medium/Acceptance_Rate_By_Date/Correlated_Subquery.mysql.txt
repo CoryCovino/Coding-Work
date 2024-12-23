@@ -1,0 +1,19 @@
+WITH summary AS (
+    SELECT f.user_id_sender
+        , f.user_id_receiver
+        , MIN(f.date) AS first_send_date
+        , SUM(CASE WHEN f.action = 'sent' THEN 1 ELSE 0 END) AS request_sent
+        , (SELECT COUNT(*) 
+            FROM fb_friend_requests 
+            WHERE action = 'accepted' 
+              AND user_id_sender = f.user_id_sender
+              AND user_id_receiver = f.user_id_receiver) AS request_accepted
+    FROM fb_friend_requests f
+    GROUP BY f.user_id_sender
+        , f.user_id_receiver
+)
+
+SELECT first_send_date AS date
+    , SUM(request_accepted) / SUM(request_sent)
+FROM summary
+GROUP BY first_send_date

@@ -1,0 +1,24 @@
+WITH total_consumption AS (
+    SELECT date
+        , SUM(consumption) AS consumption
+    FROM (
+        SELECT date, consumption
+        FROM fb_eu_energy
+        
+        UNION ALL
+        
+        SELECT date, consumption
+        FROM fb_asia_energy
+        
+        UNION ALL 
+        
+        SELECT date, consumption
+        FROM fb_na_energy
+    ) a
+    GROUP BY date
+)
+
+SELECT *
+FROM total_consumption
+WHERE consumption = (SELECT MAX(consumption) FROM total_consumption)
+;

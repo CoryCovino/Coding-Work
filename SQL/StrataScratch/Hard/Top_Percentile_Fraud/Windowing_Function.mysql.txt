@@ -1,0 +1,13 @@
+SELECT policy_num
+    , state
+    , claim_cost
+    , fraud_score
+FROM (
+    select policy_num
+        , state
+        , claim_cost
+        , fraud_score
+        , RANK() OVER (PARTITION BY state ORDER BY fraud_score DESC) AS fraud_rank
+    from fraud_score
+) a
+WHERE fraud_rank <= 5

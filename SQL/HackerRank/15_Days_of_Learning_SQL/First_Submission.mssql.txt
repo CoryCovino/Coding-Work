@@ -1,0 +1,35 @@
+WITH consecutive_dates AS (
+    SELECT submission_date
+        , COUNT(DISTINCT hacker_id) AS num_hackers
+    FROM (
+        SELECT submission_date
+            , hacker_id
+            , DENSE_RANK() OVER (PARTITION BY hacker_id ORDER BY hacker_id, submission_date) AS row_num
+        FROM submissions
+        WHERE submission_date BETWEEN '2016-03-01' AND '2016-03-15'
+    ) a
+    WHERE DATEADD(day, -row_num, submission_date) = '2016-02-29 00:00:00.000'
+    GROUP BY submission_date
+
+), max_dates AS (
+    SELECT submission_date
+        , hacker_id
+        , DENSE_RANK() OVER (PARTITION BY submission_date ORDER BY num_submissions DESC, hacker_id) AS submission_rank
+    FROM (
+        SELECT submission_date 
+            , hacker_id
+            , COUNT(DISTINCT submission_id) AS num_submissions
+        FROM submissions
+        WHERE submission_date BETWEEN '2016-03-01' AND '2016-03-15'
+        GROUP BY submission_date, hacker_id
+    ) a
+)
+
+SELECT cd.submission_date
+    , cd.num_hackers
+    , md.hacker_id
+    , h.name
+FROM consecutive_dates cd
+INNER JOIN max_dates md ON cd.submission_date = md.submission_date AND md.submission_rank = 1
+INNER JOIN hackers h ON md.hacker_id = h.hacker_id
+;

@@ -1,0 +1,9 @@
+SELECT fp.post_date
+    , (COUNT(CASE WHEN LOWER(fp.post_keywords) LIKE '%spam%'
+                 THEN fp.post_keywords
+                 ELSE null
+                  END) / COUNT(*)) * 100 AS spam_share
+FROM facebook_posts fp
+INNER JOIN facebook_post_views fpv ON fpv.post_id = fp.post_id AND fpv.viewer_id IS NOT NULL
+GROUP BY fp.post_date
+;

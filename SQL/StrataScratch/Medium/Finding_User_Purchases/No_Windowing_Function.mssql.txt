@@ -1,0 +1,13 @@
+WITH purchase_orders AS (
+    SELECT user_id
+        , created_at
+        , id
+    FROM amazon_transactions
+)
+
+SELECT DISTINCT po1.user_id
+FROM purchase_orders po1
+INNER JOIN purchase_orders po2 ON po1.user_id = po2.user_id
+                              AND po1.created_at <= po2.created_at
+                              AND po1.id != po2.id
+WHERE DATEDIFF(day, po1.created_at, po2.created_at) <= 7

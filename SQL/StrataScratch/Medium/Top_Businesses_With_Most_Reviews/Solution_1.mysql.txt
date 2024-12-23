@@ -1,0 +1,7 @@
+select name
+    , SUM(review_count)
+from yelp_business
+GROUP BY name
+ORDER BY SUM(review_count) DESC
+LIMIT 5
+;

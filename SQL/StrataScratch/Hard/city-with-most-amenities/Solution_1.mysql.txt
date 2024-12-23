@@ -1,0 +1,5 @@
+SELECT city
+FROM airbnb_search_details
+GROUP BY city
+ORDER BY SUM(length(amenities)) DESC
+LIMIT 1;

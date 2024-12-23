@@ -1,0 +1,10 @@
+SELECT 'bull', COUNT(*)
+FROM google_file_store
+WHERE LOWER(contents) LIKE '% bull %'
+
+UNION
+
+SELECT 'bear', COUNT(*)
+FROM google_file_store
+WHERE LOWER(contents) LIKE '% bear %'
+;

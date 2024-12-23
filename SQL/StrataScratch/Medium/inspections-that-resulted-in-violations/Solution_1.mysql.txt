@@ -1,0 +1,5 @@
+SELECT YEAR(inspection_date) AS inspection_year
+    , COUNT(*)
+FROM sf_restaurant_health_violations
+WHERE business_name = 'Roxanne Cafe'
+GROUP BY YEAR(inspection_date);

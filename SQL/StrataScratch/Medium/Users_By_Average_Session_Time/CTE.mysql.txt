@@ -1,0 +1,28 @@
+WITH first_page_load AS (
+    SELECT user_id
+        , DATE(timestamp) AS load_date
+        , MAX(timestamp) AS first_time
+    FROM facebook_web_log
+    WHERE action = 'page_load'
+    GROUP BY user_id
+        , DATE(timestamp)
+
+), last_page_exit AS (
+    SELECT user_id
+        , DATE(timestamp) AS load_date
+        , MIN(timestamp) AS last_time
+    FROM facebook_web_log
+    WHERE action = 'page_exit'
+    GROUP BY user_id
+        , DATE(timestamp)
+)
+
+SELECT f.user_id
+    , AVG(TIMESTAMPDIFF(SECOND, f.first_time, e.last_time)) AS avg_session_duration
+FROM first_page_load f
+LEFT OUTER JOIN last_page_exit e ON f.user_id = e.user_id
+                                AND f.load_date = e.load_date
+WHERE f.first_time < e.last_time
+GROUP BY f.user_id
+HAVING AVG(TIMESTAMPDIFF(SECOND, f.first_time, e.last_time)) > 0
+;

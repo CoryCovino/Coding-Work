@@ -1,0 +1,3 @@
+SELECT DISTINCT company_name
+    , COUNT(CASE WHEN year = 2020 THEN product_name ELSE null END) OVER (PARTITION BY company_name) - COUNT(CASE WHEN year = 2019 THEN product_name ELSE null END) OVER (PARTITION BY company_name) AS total_launch
+FROM car_launches;

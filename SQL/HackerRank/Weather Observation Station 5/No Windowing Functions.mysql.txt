@@ -1,0 +1,27 @@
+WITH city_values AS (
+    SELECT city
+        , LENGTH(city) AS name_length
+    FROM station
+    GROUP BY city
+
+), min_value AS (
+    SELECT city, name_length
+    FROM city_values
+    ORDER BY name_length, city
+    LIMIT 1
+
+), max_value AS (
+    SELECT city, name_length
+    FROM city_values
+    ORDER BY name_length DESC, city
+    LIMIT 1
+)
+
+SELECT *
+FROM min_value
+
+UNION
+
+SELECT *
+FROM max_value
+;

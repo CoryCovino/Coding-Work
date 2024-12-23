@@ -1,0 +1,8 @@
+SELECT city
+FROM (
+    SELECT city
+        , DENSE_RANK() OVER (ORDER BY SUM(length(amenities)) DESC) city_rank
+    FROM airbnb_search_details
+    GROUP BY city
+) a
+WHERE city_rank = 1;

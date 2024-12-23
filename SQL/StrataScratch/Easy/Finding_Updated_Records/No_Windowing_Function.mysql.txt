@@ -1,0 +1,21 @@
+SELECT id
+    , first_name
+    , last_name
+    , department_id
+    , salary
+FROM (
+    SELECT id
+        , first_name
+        , last_name
+        , department_id
+        , salary
+        , (SELECT COUNT(*)
+            from ms_employee_salary emp2
+            where emp2.id = ms_employee_salary.id
+              AND (emp2.salary > ms_employee_salary.salary OR
+                   (emp2.salary = ms_employee_salary.salary AND emp2.id <= ms_employee_salary.id)
+                  )
+           ) AS salary_rank
+        FROM ms_employee_salary
+    ) a
+WHERE salary_rank = 1;

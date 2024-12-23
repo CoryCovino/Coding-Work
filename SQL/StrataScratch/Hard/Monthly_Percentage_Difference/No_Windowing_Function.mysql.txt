@@ -1,0 +1,16 @@
+WITH monthly_revenues AS (
+    SELECT 
+        DATE_FORMAT(created_at, '%Y-%m-01') AS bom
+        , DATE_FORMAT(created_at, '%Y-%m') AS ym
+        , SUM(value) AS revenue
+    FROM sf_transactions
+    GROUP BY DATE_FORMAT(created_at, '%Y-%m-01')
+        , DATE_FORMAT(created_at, '%Y-%m')
+    ORDER BY created_at
+)
+
+SELECT cm.ym
+    , TRUNCATE((cm.revenue - lm.revenue) / lm.revenue * 100, 2) AS revenue_diff_pct
+FROM monthly_revenues cm
+LEFT OUTER JOIN monthly_revenues lm ON DATE_SUB(cm.bom, INTERVAL 1 MONTH) = lm.bom
+;

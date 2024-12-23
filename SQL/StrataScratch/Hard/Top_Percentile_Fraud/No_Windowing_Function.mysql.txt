@@ -1,0 +1,16 @@
+SELECT policy_num
+    , state
+    , claim_cost
+    , fraud_score
+FROM (
+    SELECT fs.*
+    , (SELECT 1 + COUNT(*)
+        FROM fraud_score fs2
+        WHERE fs2.state = fs.state 
+          AND fs2.fraud_score > fs.fraud_score 
+      ) AS fs_rank
+    FROM fraud_score fs
+) a
+WHERE fs_rank <= 5
+ORDER BY state, fraud_score DESC
+;

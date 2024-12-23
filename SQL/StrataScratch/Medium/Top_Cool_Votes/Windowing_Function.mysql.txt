@@ -1,0 +1,10 @@
+SELECT business_name
+    , review_text
+FROM (
+    SELECT business_name
+        , review_text
+        , DENSE_RANK() OVER (ORDER BY SUM(cool) DESC) AS comment_rank
+    FROM yelp_reviews
+    GROUP BY business_name, review_text
+) a
+WHERE comment_rank = 1;

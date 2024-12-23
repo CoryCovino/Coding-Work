@@ -1,0 +1,16 @@
+SELECT bike_number
+    , end_time
+FROM (
+    SELECT b.bike_number
+        , b.end_time
+        , (SELECT 1 + COUNT(*)
+            FROM dc_bikeshare_q1_2012 b2
+            WHERE (b2.bike_number = b.bike_number 
+              AND b2.end_time > b.end_time 
+            )
+           ) AS bike_rank
+    FROM dc_bikeshare_q1_2012 b
+) a
+WHERE bike_rank = 1
+ORDER BY end_time DESC
+;

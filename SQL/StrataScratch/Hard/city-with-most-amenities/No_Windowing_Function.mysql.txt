@@ -1,0 +1,16 @@
+WITH summary AS (
+    SELECT city
+        , SUM(length(amenities)) AS amenities
+    FROM airbnb_search_details
+    GROUP BY city
+)
+
+SELECT city
+FROM (
+    SELECT s.*
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.amenities > s.amenities) AS city_rank
+    FROM summary s
+) a
+WHERE city_rank = 1

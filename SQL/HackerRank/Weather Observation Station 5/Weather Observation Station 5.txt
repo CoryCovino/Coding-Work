@@ -1,0 +1,19 @@
+https://www.hackerrank.com/challenges/weather-observation-station-5/problem?isFullScreen=true
+
+WITH city_values AS (
+    SELECT city
+        , ROW_NUMBER() OVER (ORDER BY LENGTH(city), city) AS min_name_length
+        , ROW_NUMBER() OVER (ORDER BY LENGTH(city) DESC, city) AS max_name_length
+    FROM station
+)
+
+SELECT city, LENGTH(city)
+FROM city_values
+WHERE min_name_length = 1
+
+UNION
+
+SELECT city, LENGTH(city)
+FROM city_values
+WHERE max_name_length = 1
+;

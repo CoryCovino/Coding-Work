@@ -1,0 +1,5 @@
+SELECT type
+    , SUM(processed) / COUNT(*) 
+FROM facebook_complaints
+GROUP BY type
+;

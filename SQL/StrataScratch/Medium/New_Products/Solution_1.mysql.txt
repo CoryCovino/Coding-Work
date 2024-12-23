@@ -1,0 +1,16 @@
+WITH launches AS (
+    select year
+        , company_name
+        , COUNT(*) AS num_products
+    from car_launches
+    GROUP BY year
+        , company_name
+)
+
+
+SELECT cy.company_name
+    , cy.num_products - py.num_products
+FROM launches cy
+LEFT OUTER JOIN launches py ON cy.company_name = py.company_name AND py.year = 2019
+WHERE cy.year = 2020
+;

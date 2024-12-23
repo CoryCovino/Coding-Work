@@ -1,0 +1,24 @@
+WITH summary AS (
+    SELECT o.order_date
+        , c.first_name
+        , SUM(o.total_order_cost) AS total_order_cost
+    FROM orders o
+    INNER JOIN customers c ON o.cust_id = c.id
+    WHERE o.order_date BETWEEN '2019-02-01' AND '2019-05-01'
+    GROUP BY o.order_date
+        , c.first_name
+
+), ranked_summary AS (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.total_order_cost > s.total_order_cost) AS total_order_rank
+    FROM summary s
+)
+
+SELECT order_date
+    , first_name
+    , total_order_cost
+FROM ranked_summary
+WHERE total_order_rank = 1
+;

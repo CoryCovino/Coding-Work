@@ -1,0 +1,12 @@
+WITH monthly_revenues AS (
+    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym
+        , SUM(value) AS revenue
+    FROM sf_transactions
+    GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+    ORDER BY created_at
+)
+
+SELECT ym
+    , TRUNCATE((revenue - LAG(revenue) OVER (ORDER BY ym)) / LAG(revenue) OVER (ORDER BY ym) * 100, 2) AS revenue_diff_pct
+FROM monthly_revenues
+;

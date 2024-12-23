@@ -1,0 +1,21 @@
+WITH summary AS (
+    SELECT s.sat_writing
+        , (SELECT COUNT(*)
+            FROM sat_scores s2
+            WHERE s2.sat_writing > s.sat_writing
+               OR (s2.sat_writing = s.sat_writing and s2.id <= s.id)
+            ) AS writing_rank
+    FROM sat_scores s
+)
+
+SELECT id
+FROM sat_scores
+WHERE sat_writing IN (
+    SELECT AVG(su.sat_writing)
+    FROM summary su
+    WHERE su.writing_rank IN (
+        FLOOR((SELECT MAX(writing_rank) + 1 FROM summary) / 2),
+        FLOOR((SELECT MAX(writing_rank) + 2 FROM summary) / 2)
+    )
+)
+;

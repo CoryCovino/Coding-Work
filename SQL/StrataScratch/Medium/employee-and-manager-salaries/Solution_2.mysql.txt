@@ -1,0 +1,5 @@
+SELECT e.first_name
+    , e.salary
+FROM employee e
+INNER JOIN employee m ON e.manager_id = m.id AND e.salary > m.salary
+;

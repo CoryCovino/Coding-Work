@@ -1,0 +1,14 @@
+SELECT order_date
+    , first_name
+    , total_order_cost
+FROM (
+    SELECT DISTINCT o.order_date
+        , c.first_name
+        , SUM(o.total_order_cost) OVER (PARTITION BY o.order_date, c.first_name) AS total_order_cost
+    FROM orders o
+    INNER JOIN customers c ON o.cust_id = c.id
+    WHERE o.order_date BETWEEN '2019-02-01' AND '2019-05-01'
+) a
+ORDER BY total_order_cost DESC
+LIMIT 1
+;

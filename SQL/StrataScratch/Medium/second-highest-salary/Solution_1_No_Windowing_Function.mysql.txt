@@ -1,0 +1,10 @@
+SELECT salary
+FROM (
+    SELECT salary
+        , (SELECT COUNT(*) + 1
+            FROM employee e2
+            WHERE e2.salary > e.salary) AS salary_rank
+    FROM employee e
+) a
+WHERE salary_rank = 2
+;

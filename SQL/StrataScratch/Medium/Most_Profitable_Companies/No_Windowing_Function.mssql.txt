@@ -1,0 +1,10 @@
+SELECT a.company
+    , a.profits
+FROM forbes_global_2010_2014 a
+INNER JOIN (
+    SELECT DISTINCT profits
+    FROM forbes_global_2010_2014
+    ORDER BY profits DESC
+    LIMIT 3
+) p ON a.profits = p.profits 
+ORDER BY a.profits DESC;

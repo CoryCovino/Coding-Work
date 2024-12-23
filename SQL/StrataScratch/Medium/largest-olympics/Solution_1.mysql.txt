@@ -1,0 +1,7 @@
+select games
+    , COUNT(DISTINCT id) AS num_athletes
+from olympics_athletes_events
+GROUP BY games
+ORDER BY COUNT(DISTINCT id) DESC
+LIMIT 1
+;

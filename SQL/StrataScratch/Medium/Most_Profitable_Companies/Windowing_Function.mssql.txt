@@ -1,0 +1,10 @@
+SELECT company
+    , profits
+FROM (
+    SELECT company
+        , profits
+        , DENSE_RANK() OVER (ORDER BY profits DESC) AS profit_rank
+    FROM forbes_global_2010_2014
+) a
+WHERE profit_rank <= 3
+ORDER BY profits DESC

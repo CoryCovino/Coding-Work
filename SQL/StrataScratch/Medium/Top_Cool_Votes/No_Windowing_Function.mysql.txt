@@ -1,0 +1,13 @@
+WITH reviews AS (
+    SELECT review_text
+        , SUM(cool) AS most_cool
+    FROM yelp_reviews
+    GROUP BY review_text
+)
+
+SELECT yr.business_name
+    , r.review_text
+FROM yelp_reviews yr
+INNER JOIN reviews r ON yr.review_text = r.review_text
+WHERE r.most_cool IN (SELECT MAX(most_cool) FROM reviews)
+;
