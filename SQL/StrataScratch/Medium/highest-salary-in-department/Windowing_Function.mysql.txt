@@ -1,0 +1,14 @@
+SELECT department
+    , first_name
+    , salary
+FROM (
+    SELECT department
+        , first_name
+        , salary
+        , CASE WHEN salary = MAX(salary) OVER (PARTITION BY department)
+               THEN 1
+               ELSE 0
+                END as is_max_salary
+    FROM employee e
+) a
+WHERE is_max_salary = 1;

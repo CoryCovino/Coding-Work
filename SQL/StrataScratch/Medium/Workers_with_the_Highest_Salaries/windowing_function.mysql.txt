@@ -1,0 +1,8 @@
+SELECT worker_title
+FROM (
+    SELECT t.worker_title
+        , DENSE_RANK() OVER (ORDER BY w.salary DESC) AS salary_rank
+    FROM worker w
+    INNER JOIN title t ON w.worker_id = t.worker_ref_id
+) a
+WHERE salary_rank = 1;

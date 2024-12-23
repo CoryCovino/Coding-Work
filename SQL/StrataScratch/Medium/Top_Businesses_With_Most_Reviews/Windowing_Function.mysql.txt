@@ -1,0 +1,12 @@
+SELECT name
+    , num_reviews
+FROM (
+    SELECT name
+        , SUM(review_count) OVER (PARTITION BY name) AS num_reviews
+        , DENSE_RANK() OVER (ORDER BY SUM(review_count) DESC) AS review_rank
+    FROM yelp_business
+    GROUP BY name
+) a
+WHERE review_rank <= 5
+ORDER BY review_rank
+;

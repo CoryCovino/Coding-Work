@@ -1,0 +1,2 @@
+SELECT (SELECT MAX(e.salary) FROM db_employee e WHERE department_id = 4) - (SELECT MAX(e.salary) FROM db_employee e WHERE department_id = 1) 
+;

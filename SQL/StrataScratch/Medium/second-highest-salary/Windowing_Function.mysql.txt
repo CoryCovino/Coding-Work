@@ -1,0 +1,8 @@
+SELECT salary
+FROM (
+    SELECT salary
+        , DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employee e
+) a
+WHERE salary_rank = 2
+;

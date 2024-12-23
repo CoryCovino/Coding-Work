@@ -1,0 +1,18 @@
+SELECT survived
+    , COUNT(CASE WHEN pclass = 1 THEN 1 ELSE null END) AS first_class
+    , COUNT(CASE WHEN pclass = 2 THEN 1 ELSE null END) AS second_class
+    , COUNT(CASE WHEN pclass = 3 THEN 1 ELSE null END) AS third_class
+FROM titanic
+WHERE survived = 0
+GROUP BY survived
+
+UNION
+
+SELECT survived
+    , SUM(CASE WHEN pclass = 1 THEN survived ELSE 0 END) AS first_class
+    , SUM(CASE WHEN pclass = 2 THEN survived ELSE 0 END) AS second_class
+    , SUM(CASE WHEN pclass = 3 THEN survived ELSE 0 END) AS third_class
+FROM titanic
+WHERE survived = 1
+GROUP BY survived
+;

@@ -1,0 +1,5 @@
+select DISTINCT ah.host_id
+    , ag.guest_id
+from airbnb_hosts ah
+INNER JOIN airbnb_guests ag ON ag.gender = ah.gender
+                           AND ag.nationality = ah.nationality;

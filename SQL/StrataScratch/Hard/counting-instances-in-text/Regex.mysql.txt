@@ -1,0 +1,10 @@
+SELECT 'bull', COUNT(*)
+FROM google_file_store
+WHERE LOWER(contents) REGEXP '(bull)([^a-z])'
+
+UNION
+
+SELECT 'bear', COUNT(*)
+FROM google_file_store
+WHERE LOWER(contents) REGEXP '(bear)([^a-z])'
+;

@@ -1,0 +1,16 @@
+WITH distinct_users AS (
+    SELECT user1, user2
+    FROM facebook_friends
+    
+    UNION
+    
+    SELECT user2, user1
+    FROM facebook_friends
+)
+
+SELECT user1
+    , COUNT(*) / ROUND((SELECT COUNT(DISTINCT user1) FROM distinct_users), 2) * 100
+FROM distinct_users
+GROUP BY user1
+ORDER BY user1
+;

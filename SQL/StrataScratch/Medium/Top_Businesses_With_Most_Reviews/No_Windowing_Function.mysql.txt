@@ -1,0 +1,21 @@
+WITH summary AS (
+    SELECT name
+        , SUM(review_count) AS num_reviews
+    FROM yelp_business
+    GROUP BY name
+)
+
+SELECT name
+    , num_reviews
+FROM (
+    SELECT name
+        , num_reviews
+        , (SELECT 1 + COUNT(*)
+            FROM summary s2
+            WHERE s2.num_reviews > s.num_reviews
+              ) AS review_rank
+    FROM summary s
+) a
+WHERE review_rank <= 5
+ORDER BY review_rank
+;

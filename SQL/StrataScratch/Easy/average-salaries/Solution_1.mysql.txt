@@ -1,0 +1,5 @@
+select department
+    , first_name
+    , salary
+    , AVG(salary) OVER (PARTITION BY department) AS dept_salary
+from employee;

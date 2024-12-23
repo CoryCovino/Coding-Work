@@ -1,0 +1,13 @@
+SELECT date
+    , SUM(was_request_accepted) / COUNT(*)
+FROM (
+    SELECT user_id_sender
+        , user_id_receiver
+        , MIN(date) AS date
+        , CASE WHEN COUNT(DISTINCT action) = 2 THEN 1 ELSE 0 END AS was_request_accepted
+    FROM fb_friend_requests
+    GROUP BY user_id_sender
+        , user_id_receiver
+) a
+GROUP BY date
+;

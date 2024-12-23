@@ -1,0 +1,8 @@
+select lp.title
+    , MAX(lp.budget) AS budget
+    , CEIL(SUM((DATEDIFF(lp.end_date, lp.start_date) / 365) * e.salary)) AS prorated_employee_expense
+from linkedin_projects lp
+INNER JOIN linkedin_emp_projects lep ON lp.id = lep.project_id
+INNER JOIN linkedin_employees e ON lep.emp_id = e.id
+GROUP BY lp.title
+HAVING SUM((DATEDIFF(lp.end_date, lp.start_date) / 365) * e.salary) > MAX(lp.budget);

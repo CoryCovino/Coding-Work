@@ -1,0 +1,3 @@
+select COUNT(DISTINCT movie)
+from oscar_nominees
+WHERE nominee = 'Abigail Breslin';

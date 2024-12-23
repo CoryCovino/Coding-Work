@@ -1,0 +1,10 @@
+SELECT id_guest
+    , DENSE_RANK() OVER (ORDER BY messages DESC)
+    , messages
+FROM (
+    SELECT id_guest
+        , SUM(n_messages) AS messages
+    FROM airbnb_contacts
+    GROUP BY id_guest
+) a
+ORDER BY messages DESC;

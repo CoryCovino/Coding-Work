@@ -1,0 +1,18 @@
+SELECT employee_title
+    , sex
+    , AVG(salary + total_bonus) AS avg_compensation
+FROM (
+    SELECT se.id
+        , se.employee_title
+        , se.sex
+        , MAX(se.salary) AS salary
+        , SUM(sb.bonus) AS total_bonus
+    FROM sf_employee se
+    INNER JOIN sf_bonus sb ON se.id = sb.worker_ref_id
+    GROUP BY se.id
+        , se.employee_title
+        , se.sex
+) a
+GROUP BY employee_title
+    , sex
+;

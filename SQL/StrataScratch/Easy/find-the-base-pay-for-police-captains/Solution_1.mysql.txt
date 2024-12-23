@@ -1,0 +1,4 @@
+select employeename, basepay
+from sf_public_salaries
+WHERE jobtitle = 'CAPTAIN III (POLICE DEPARTMENT)'
+;

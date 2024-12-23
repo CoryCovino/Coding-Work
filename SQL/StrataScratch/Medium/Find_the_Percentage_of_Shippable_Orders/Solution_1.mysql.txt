@@ -1,0 +1,4 @@
+select COUNT(CASE WHEN c.address IS NOT NULL THEN c.address ELSE null END) / COUNT(*) * 100
+from orders o
+INNER JOIN customers c ON o.cust_id = c.id
+;

@@ -1,0 +1,7 @@
+SELECT city
+    , property_type
+    , AVG(bedrooms) AS bedrooms
+    , AVG(bathrooms) AS bathrooms
+FROM airbnb_search_details
+GROUP BY city
+    , property_type;
