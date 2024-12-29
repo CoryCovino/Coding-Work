@@ -1,0 +1,6 @@
+SELECT DISTINCT up.user_id
+    , up.signup_date AS signup_date
+    , COUNT(ua.activity_date) OVER (PARTITION BY up.user_id) AS num_activities
+FROM user_profiles up
+INNER JOIN user_activities ua ON up.user_id = ua.user_id AND DATE_ADD(up.signup_date, INTERVAL 30 DAY) >= ua.activity_date
+;

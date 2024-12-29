@@ -1,0 +1,6 @@
+SELECT fs.flight_id
+    , ec.movie_id
+    , ec.duration
+FROM entertainment_catalog ec
+INNER JOIN flight_schedule fs ON ec.duration < fs.flight_duration
+                             AND fs.flight_id = 101;

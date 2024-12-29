@@ -1,0 +1,15 @@
+SELECT profession
+    , COUNT(DISTINCT CASE WHEN birth_month = 1 THEN employee_id ELSE null END) AS jan
+    , COUNT(DISTINCT CASE WHEN birth_month = 2 THEN employee_id ELSE null END) AS feb
+    , COUNT(DISTINCT CASE WHEN birth_month = 3 THEN employee_id ELSE null END) AS mar
+    , COUNT(DISTINCT CASE WHEN birth_month = 4 THEN employee_id ELSE null END) AS apr
+    , COUNT(DISTINCT CASE WHEN birth_month = 5 THEN employee_id ELSE null END) AS may
+    , COUNT(DISTINCT CASE WHEN birth_month = 6 THEN employee_id ELSE null END) AS june
+    , COUNT(DISTINCT CASE WHEN birth_month = 7 THEN employee_id ELSE null END) AS july
+    , COUNT(DISTINCT CASE WHEN birth_month = 8 THEN employee_id ELSE null END) AS aug
+    , COUNT(DISTINCT CASE WHEN birth_month = 9 THEN employee_id ELSE null END) AS sept
+    , COUNT(DISTINCT CASE WHEN birth_month = 10 THEN employee_id ELSE null END) AS `oct`
+    , COUNT(DISTINCT CASE WHEN birth_month = 11 THEN employee_id ELSE null END) AS nov
+    , COUNT(DISTINCT CASE WHEN birth_month = 12 THEN employee_id ELSE null END) AS `dec`
+FROM employee_list
+GROUP BY profession;

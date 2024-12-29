@@ -1,0 +1,17 @@
+WITH base_accounts AS (
+    SELECT DISTINCT account_id
+    FROM sf_events
+    WHERE date BETWEEN '2020-12-01' AND '2021-01-31'
+)
+
+
+SELECT ba.account_id
+    , CASE WHEN COUNT(s.date) > 0
+           THEN 1
+           ELSE 0
+            END AS retention_rate
+FROM base_accounts ba
+LEFT OUTER JOIN sf_events s ON ba.account_id = s.account_id
+                           AND s.date >= '2021-02-01'
+GROUP BY ba.account_id
+;

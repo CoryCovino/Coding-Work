@@ -1,0 +1,4 @@
+SELECT DATE_FORMAT(shipment_date, '%Y-%m')
+    , COUNT(shipment_id)
+FROM amazon_shipment
+GROUP BY DATE_FORMAT(shipment_date, '%Y-%m');

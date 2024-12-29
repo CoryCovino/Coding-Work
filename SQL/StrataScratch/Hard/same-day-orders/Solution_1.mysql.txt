@@ -1,0 +1,23 @@
+WITH logins AS (
+    SELECT DISTINCT s.user_id
+        , s.session_date
+    FROM sessions s
+
+), orders AS (
+    SELECT order_date
+        , user_id
+        , SUM(order_value) AS total_order_value
+        , COUNT(DISTINCT order_id) AS num_orders
+    FROM order_summary
+    GROUP BY order_date
+        , user_id
+)
+
+SELECT o.user_id
+    , o.order_date
+    , o.num_orders
+    , o.total_order_value
+FROM logins l
+INNER JOIN orders o ON l.session_date = o.order_date
+                   AND l.user_id = o.user_id
+;

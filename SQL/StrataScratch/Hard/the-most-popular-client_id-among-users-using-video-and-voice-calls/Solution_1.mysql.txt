@@ -1,0 +1,9 @@
+SELECT DISTINCT client_id
+FROM fact_events fe
+WHERE user_id IN (
+    SELECT fe.user_id
+    FROM fact_events fe
+    WHERE fe.event_type IN ('video call received', 'video call sent', 'voice call received', 'voice call sent') 
+    GROUP BY user_id
+    HAVING (COUNT(DISTINCT fe.event_id) / (SELECT COUNT(DISTINCT fe2.event_id) FROM fact_events fe2 WHERE fe.user_id = fe2.user_id)) >= 0.50
+);

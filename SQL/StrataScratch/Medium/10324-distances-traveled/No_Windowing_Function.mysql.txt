@@ -1,0 +1,22 @@
+WITH summary AS (
+    SELECT l.user_id
+        , lu.name
+        , SUM(l.distance) AS total_distance
+    FROM lyft_rides_log l
+    INNER JOIN lyft_users lu ON l.user_id = lu.id
+    GROUP BY l.user_id
+        , lu.name
+)
+
+SELECT user_id
+    , name
+    , total_distance
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.total_distance > s.total_distance) AS dist_rank
+    FROM summary s
+) a
+WHERE dist_rank <= 10
+ORDER BY dist_rank;

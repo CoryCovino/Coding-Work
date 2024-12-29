@@ -1,0 +1,18 @@
+SELECT entry_date
+    , SUM(is_premium_account) AS premium_paid_accounts
+    , SUM(is_still_premium_account) AS premium_paid_accounts_after_7d
+FROM (
+    SELECT pabd.entry_date
+        , pabd.account_id
+        , 1 AS is_premium_account
+        , CASE WHEN COALESCE(pabd2.final_price, 0) > 1
+               THEN 1
+               ELSE 0
+                END AS is_still_premium_account
+    FROM premium_accounts_by_day pabd
+    LEFT OUTER JOIN premium_accounts_by_day pabd2 ON pabd.account_id = pabd2.account_id
+                AND pabd2.entry_date = DATE_ADD(pabd.entry_date, INTERVAL 7 DAY)
+    WHERE pabd.final_price != 0
+) a
+GROUP BY entry_date
+HAVING SUM(is_still_premium_account) > 0;

@@ -1,0 +1,10 @@
+SELECT MAX(total_score) - MIN(total_score) AS difference_in_scores
+FROM (
+    SELECT id
+        , student
+        , SUM(assignment1 + assignment2 + assignment3) AS total_score
+    FROM box_scores
+    GROUP BY id
+        , student
+) a
+;

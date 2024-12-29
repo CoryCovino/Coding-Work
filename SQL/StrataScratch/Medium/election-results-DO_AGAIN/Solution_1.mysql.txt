@@ -1,0 +1,33 @@
+WITH summary AS (
+    SELECT candidate, COUNT(*) AS num_votes
+    FROM voting_results
+    WHERE voter IN (
+        SELECT voter
+        FROM voting_results
+        GROUP BY voter
+        HAVING COUNT(DISTINCT CASE WHEN candidate IS NULL THEN 'empty' ELSE candidate END) = 1
+    )
+    
+    UNION
+    
+    SELECT candidate
+        , num_votes
+    FROM (
+        SELECT DISTINCT voter
+            , candidate
+            , COUNT(CASE WHEN candidate IS NULL THEN 'empty' ELSE candidate END) OVER (PARTITION BY voter, candidate) / COUNT(CASE WHEN candidate IS NULL THEN 'empty' ELSE candidate END) OVER (PARTITION BY voter) AS num_votes
+        FROM voting_results
+        WHERE voter IN (
+            SELECT voter
+            FROM voting_results
+            GROUP BY voter
+            HAVING COUNT(DISTINCT CASE WHEN candidate IS NULL THEN 'empty' ELSE candidate END) > 1
+        )
+    ) a
+)
+
+SELECT candidate
+FROM summary
+GROUP BY candidate
+ORDER BY SUM(num_votes) DESC
+LIMIT 1;

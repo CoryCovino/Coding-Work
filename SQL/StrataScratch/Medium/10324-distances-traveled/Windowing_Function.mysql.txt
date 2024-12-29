@@ -1,0 +1,15 @@
+SELECT user_id
+    , name
+    , total_distance
+FROM (
+    SELECT l.user_id
+        , lu.name
+        , SUM(l.distance) AS total_distance
+        , RANK() OVER (ORDER BY SUM(l.distance) DESC) AS dist_rank
+    FROM lyft_rides_log l
+    INNER JOIN lyft_users lu ON l.user_id = lu.id
+    GROUP BY l.user_id
+        , lu.name
+    ORDER BY SUM(l.distance) DESC
+) a
+WHERE dist_rank <= 10;

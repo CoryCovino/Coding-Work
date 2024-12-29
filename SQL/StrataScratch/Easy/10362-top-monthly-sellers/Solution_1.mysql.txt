@@ -1,0 +1,17 @@
+SELECT product_category
+    , seller_id
+    , total_sales
+    , market_place
+    , sales_date
+FROM (
+    SELECT product_category
+        , seller_id
+        , total_sales
+        , market_place
+        , sales_date
+        , DENSE_RANK() OVER (PARTITION BY product_category ORDER BY total_sales DESC) sales_rank
+    FROM sales_data
+    WHERE MONTH(sales_date) = 1
+) a
+WHERE sales_rank <= 3
+;

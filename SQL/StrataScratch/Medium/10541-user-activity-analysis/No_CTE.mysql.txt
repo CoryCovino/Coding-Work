@@ -1,0 +1,7 @@
+SELECT up.user_id
+    , MIN(up.signup_date) AS signup_date
+    , COUNT(ua.activity_date) AS num_activities
+FROM user_profiles up
+INNER JOIN user_activities ua ON up.user_id = ua.user_id AND DATE_ADD(up.signup_date, INTERVAL 30 DAY) >= ua.activity_date
+GROUP BY up.user_id
+;

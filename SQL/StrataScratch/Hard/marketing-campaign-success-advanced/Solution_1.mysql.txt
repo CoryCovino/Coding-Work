@@ -1,0 +1,28 @@
+WITH initial_purchases AS (
+    SELECT mc.user_id
+        , mc.created_at
+        , mc.product_id
+    FROM marketing_campaign mc
+    INNER JOIN (
+        SELECT user_id
+            , MIN(created_at) AS created_at
+        FROM marketing_campaign
+        GROUP BY user_id
+    ) ip ON mc.user_id = ip.user_id
+        AND mc.created_at = ip.created_at
+)
+
+SELECT COUNT(DISTINCT ip.user_id)
+FROM initial_purchases ip
+INNER JOIN (
+    SELECT created_at
+        , user_id
+        , product_id
+    FROM marketing_campaign
+    GROUP BY user_id
+        , product_id
+    HAVING COUNT(*) >= 1
+) mc ON mc.user_id = ip.user_id
+    AND mc.created_at > ip.created_at
+    AND mc.product_id != ip.product_id
+;

@@ -1,0 +1,12 @@
+SELECT p.title
+    , ROUND(p.budget / e.num_employees, 0)
+FROM ms_projects p
+INNER JOIN (
+    SELECT e.project_id
+        , COUNT(*) AS num_employees
+    FROM ms_emp_projects e
+    GROUP BY e.project_id
+) e ON p.id = e.project_id
+ORDER BY p.budget DESC
+;
+

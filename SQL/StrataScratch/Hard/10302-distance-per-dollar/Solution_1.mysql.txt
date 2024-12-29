@@ -1,0 +1,15 @@
+WITH summary AS (
+    SELECT DATE_FORMAT(request_date, '%Y-%m') AS ym
+        , request_date
+        , AVG(distance_to_travel / monetary_cost) AS distance_per_dollar
+        , DENSE_RANK() OVER (PARTITION BY DATE_FORMAT(request_date, '%Y-%m') ORDER BY AVG(distance_to_travel / monetary_cost) DESC) AS d_rank
+    FROM uber_request_logs
+    GROUP BY DATE_FORMAT(request_date, '%Y-%m')
+        , request_date
+)
+
+SELECT s.ym
+    , (s.distance_per_dollar - (SELECT distance_per_dollar FROM summary s2 WHERE s.ym = s2.ym AND s2.d_rank = 2)) / 2 AS difference
+FROM summary s
+WHERE s.d_rank = 1
+;

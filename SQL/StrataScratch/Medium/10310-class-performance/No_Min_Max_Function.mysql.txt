@@ -1,0 +1,16 @@
+WITH summary AS (
+    SELECT id
+        , student
+        , SUM(assignment1 + assignment2 + assignment3) AS total_score
+        , DENSE_RANK() OVER (ORDER BY SUM(assignment1 + assignment2 + assignment3) DESC) AS score_rank
+    FROM box_scores
+    GROUP BY id
+        , student
+)
+
+SELECT s.total_score - s2.total_score
+FROM summary s
+CROSS JOIN summary s2 
+WHERE s.score_rank = 1
+  AND s2.score_rank = 10
+;

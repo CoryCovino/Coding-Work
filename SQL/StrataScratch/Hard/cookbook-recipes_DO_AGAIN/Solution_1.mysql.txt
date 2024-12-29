@@ -1,0 +1,13 @@
+WITH rankings AS (
+    SELECT (ROW_NUMBER() OVER (ORDER BY page_number) - 1) * 2 AS left_page 
+        , (ROW_NUMBER() OVER (ORDER BY page_number) - 1) * 2 + 1 AS right_page
+    FROM cookbook_titles
+) 
+
+SELECT
+    r.left_page,
+    t1.title AS left_title,
+    t2.title AS right_title
+FROM rankings AS r
+LEFT JOIN cookbook_titles AS t1 ON r.left_page = t1.page_number
+LEFT JOIN cookbook_titles AS t2 ON r.right_page = t2.page_number;

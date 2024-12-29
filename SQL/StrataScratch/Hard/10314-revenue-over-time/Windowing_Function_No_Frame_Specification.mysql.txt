@@ -1,0 +1,19 @@
+WITH summary AS (
+    SELECT LAST_DAY(created_at) AS eom
+        , SUM(purchase_amt) AS total_purchase_amount
+    FROM amazon_purchases
+    WHERE purchase_amt > 0
+    GROUP BY LAST_DAY(created_at)
+)
+
+SELECT DATE_FORMAT(eom, '%Y-%m') AS month
+    , CASE WHEN MONTH(eom) = 1
+           THEN total_purchase_amount
+           
+           WHEN MONTH(eom) = 2
+           THEN (total_purchase_amount + LAG(total_purchase_amount, 1) OVER (ORDER BY eom)) / 2
+           
+           ELSE (total_purchase_amount + LAG(total_purchase_amount, 1) OVER (ORDER BY eom) + LAG(total_purchase_amount, 2) OVER (ORDER BY eom)) / 3
+            END AS avg_revenue
+FROM summary
+;

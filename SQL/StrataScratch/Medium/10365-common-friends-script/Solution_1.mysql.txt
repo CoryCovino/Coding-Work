@@ -1,0 +1,10 @@
+SELECT *
+FROM users
+WHERE user_id IN (
+    SELECT f.friend_id
+    FROM users u
+    INNER JOIN friends f ON u.user_id = f.user_id
+                        AND u.user_name in ('Karl', 'Hans')
+    GROUP BY f.friend_id
+    HAVING COUNT(*) > 1
+);

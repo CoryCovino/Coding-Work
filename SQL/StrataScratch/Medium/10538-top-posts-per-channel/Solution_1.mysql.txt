@@ -1,0 +1,23 @@
+WITH summary AS (
+    SELECT c.channel_name
+        , p.post_id
+        , p.created_at
+        , SUM(p.likes) AS likes
+    FROM posts p
+    INNER JOIN channels c ON p.channel_id = c.channel_id
+    GROUP BY c.channel_name
+        , p.post_id
+        , p.created_at
+)
+
+SELECT channel_name
+    , post_id
+    , created_at
+    , likes
+FROM (
+    SELECT *
+        , RANK() OVER (PARTITION BY channel_name ORDER BY likes DESC) AS like_rank
+    FROM summary
+) a
+WHERE like_rank <= 3
+;

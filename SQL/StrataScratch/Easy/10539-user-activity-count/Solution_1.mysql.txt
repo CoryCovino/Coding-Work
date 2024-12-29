@@ -1,0 +1,5 @@
+SELECT up.user_id
+    , COUNT(DISTINCT al.activity_type) AS num_activities
+FROM user_profiles up
+LEFT OUTER JOIN activity_log al ON up.user_id = al.user_id
+GROUP BY up.user_id;

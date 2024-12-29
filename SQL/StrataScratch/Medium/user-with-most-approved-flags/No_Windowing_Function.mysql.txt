@@ -1,0 +1,22 @@
+WITH summary AS (
+    SELECT CONCAT(uf.user_firstname, ' ', uf.user_lastname) AS username
+        , COUNT(DISTINCT uf.video_id) AS num_videos
+    FROM user_flags uf
+    INNER JOIN flag_review fr ON uf.flag_id = fr.flag_id
+                             AND fr.reviewed_outcome = 'APPROVED'
+    WHERE uf.user_firstname IS NOT NULL 
+      AND uf.user_lastname IS NOT NULL
+    GROUP BY CONCAT(uf.user_firstname, ' ', uf.user_lastname)
+)
+
+SELECT username
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.num_videos > s.num_videos
+        ) AS video_rank
+    FROM summary s
+) a
+WHERE video_rank = 1
+;

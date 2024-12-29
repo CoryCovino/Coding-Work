@@ -1,0 +1,17 @@
+WITH all_customers AS (
+    SELECT customer_id
+    FROM customer_interactions
+    
+    UNION
+    
+    SELECT customer_id
+    FROM user_content
+)
+
+SELECT ac.customer_id AS customer_id
+    , COUNT(DISTINCT ci.interaction_id) AS num_ints
+    , COUNT(DISTINCT uc.content_id) AS num_conts
+FROM all_customers ac
+LEFT OUTER JOIN customer_interactions ci ON ac.customer_id = ci.customer_id
+LEFT OUTER JOIN user_content uc ON ac.customer_id = uc.customer_id
+GROUP BY ac.customer_id;

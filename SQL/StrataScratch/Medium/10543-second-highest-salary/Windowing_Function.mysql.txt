@@ -1,0 +1,12 @@
+SELECT department
+    , employee_id
+    , salary
+FROM (
+    SELECT department
+        , employee_id
+        , salary
+        , DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank
+    FROM employee_data
+) a
+WHERE salary_rank = 2
+;

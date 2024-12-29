@@ -1,0 +1,16 @@
+SELECT device_type
+    , time_period
+    , user_count
+FROM (
+    SELECT ua.device_type
+        , CONCAT(ua.start_timestamp, ' to ', ua.end_timestamp) AS time_period
+        , ua.user_count
+        , (SELECT COUNT(*) + 1
+            FROM user_activity ua2
+            WHERE 
+            ua.device_type = ua2.device_type
+              AND 
+              ua2.user_count > ua.user_count) AS device_rank
+    FROM user_activity ua
+) a
+WHERE device_rank = 1;

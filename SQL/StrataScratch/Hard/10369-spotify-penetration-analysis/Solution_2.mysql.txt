@@ -1,0 +1,16 @@
+WITH summary AS (
+    SELECT pa.country
+        , CASE WHEN pa.sessions >= 5
+                AND pa.listening_hours >= 10
+                AND pa.last_active_date >= DATE_ADD('2024-01-31', INTERVAL -30 DAY)
+               THEN 1
+               ELSE 0
+                END AS is_active
+    FROM penetration_analysis pa
+)
+
+SELECT country
+    , ROUND(SUM(is_active) / COUNT(*), 2) AS pct
+FROM summary
+GROUP BY country
+;

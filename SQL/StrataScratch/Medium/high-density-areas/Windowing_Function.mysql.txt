@@ -1,0 +1,12 @@
+SELECT area_name
+    , customer_density
+FROM (
+    SELECT s.area_name
+        , COUNT(DISTINCT tr.customer_id) / MAX(s.area_size) AS customer_density
+        , DENSE_RANK() OVER (ORDER BY COUNT(DISTINCT tr.customer_id) / MAX(s.area_size) DESC) AS customer_density_rank
+    FROM transaction_records tr
+    INNER JOIN stores s ON tr.store_id = s.store_id
+    GROUP BY s.area_name
+) a
+WHERE customer_density_rank <= 3
+;

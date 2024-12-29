@@ -1,0 +1,3 @@
+select ROUND(COUNT(DISTINCT CASE WHEN status = 'Open' THEN user_id ELSE null END) / COUNT(DISTINCT user_id), 1) AS active_users_share
+from fb_active_users
+;
