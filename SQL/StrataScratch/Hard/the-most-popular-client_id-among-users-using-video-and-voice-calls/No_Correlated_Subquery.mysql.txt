@@ -1,0 +1,19 @@
+WITH relevant_users AS (
+    SELECT client_id
+    FROM (
+        SELECT fe.user_id
+            , fe.event_id
+            , fe.client_id
+            , CASE WHEN fe.event_type IN ('video call received', 'video call sent', 'voice call received', 'voice call sent')
+                   THEN 1
+                   ELSE 0
+                    END AS is_relevant
+        FROM fact_events fe
+    ) a
+    GROUP BY user_id
+    HAVING (COUNT(DISTINCT CASE WHEN is_relevant = 1 THEN event_id ELSE null END) / COUNT(DISTINCT event_id)) >= 0.50
+
+)
+
+SELECT *
+FROM relevant_users;

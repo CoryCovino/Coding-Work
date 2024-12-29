@@ -1,0 +1,11 @@
+SELECT city
+    , country
+    , ROUND(population / area, 0)
+FROM cities_population
+WHERE area > 0
+  AND (population / area) = (
+    SELECT MAX(population / area) FROM cities_population
+)
+  OR (population / area) = (
+    SELECT MIN(population / area) FROM cities_population
+  )

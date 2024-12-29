@@ -1,0 +1,9 @@
+SELECT zt.city
+FROM zillow_transactions zt
+CROSS JOIN (
+   SELECT AVG(mkt_price) AS avg_price
+   FROM zillow_transactions  
+) a
+GROUP BY zt.city
+HAVING AVG(zt.mkt_price) > MAX(a.avg_price)
+;

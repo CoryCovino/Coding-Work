@@ -1,0 +1,16 @@
+
+SELECT department
+    , employee_id
+    , salary
+FROM (
+    SELECT e.department
+        , e.employee_id
+        , e.salary
+        , (SELECT COUNT(DISTINCT salary)
+            FROM employee_data e2
+            WHERE e2.department = e.department
+              AND e2.salary >= e.salary) AS salary_rank
+    FROM employee_data e
+) a
+WHERE salary_rank = 2
+;

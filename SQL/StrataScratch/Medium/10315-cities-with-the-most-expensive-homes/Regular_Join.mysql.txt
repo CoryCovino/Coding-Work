@@ -1,0 +1,14 @@
+WITH summary AS (
+    SELECT zt.city
+        , AVG(zt.mkt_price) AS city_avg_price
+    FROM zillow_transactions zt
+    GROUP BY zt.city
+)
+
+SELECT s.city
+FROM summary s
+INNER JOIN (
+   SELECT AVG(mkt_price) AS avg_price
+   FROM zillow_transactions  
+) a ON s.city_avg_price > a.avg_price
+;

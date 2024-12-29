@@ -1,0 +1,16 @@
+WITH summary AS (
+    SELECT MONTH(request_date) AS request_month
+        , SUM(distance_to_travel) / SUM(monetary_cost) AS dist_per_dollar
+    FROM uber_request_logs
+    GROUP BY MONTH(request_date)
+
+), data AS (
+    SELECT request_month
+        , dist_per_dollar AS actual
+        , LAG(dist_per_dollar, 1) OVER (ORDER BY request_month) AS forecast
+    FROM summary
+)
+
+
+SELECT sqrt(AVG(POW(actual - forecast, 2))) AS forecast
+FROM data;

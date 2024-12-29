@@ -1,0 +1,21 @@
+WITH summary AS (
+    SELECT s.area_name
+        , COUNT(DISTINCT tr.customer_id) / MAX(s.area_size) AS customer_density
+    FROM transaction_records tr
+    INNER JOIN stores s ON tr.store_id = s.store_id
+    GROUP BY s.area_name
+)
+
+SELECT area_name
+    , customer_density
+FROM (
+    SELECT s1.area_name
+        , s1.customer_density
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.customer_density > s1.customer_density) AS d_rank
+    FROM summary s1
+) a
+WHERE d_rank <= 3
+;
+    

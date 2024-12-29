@@ -1,0 +1,19 @@
+WITH daily_values AS (
+    SELECT request_date
+        , ROUND(AVG(distance_to_travel / monetary_cost), 2) AS dollar_diff
+    FROM uber_request_logs
+    GROUP BY request_date
+
+), monthly_values AS (
+    SELECT DATE_FORMAT(request_date, '%Y-%m') AS ym
+        , ROUND(AVG(distance_to_travel / monetary_cost), 2) AS dollar_diff
+    FROM uber_request_logs
+    GROUP BY DATE_FORMAT(request_date, '%Y-%m')
+)
+
+SELECT DISTINCT mv.ym
+    , ROUND(ABS(dv.dollar_diff - mv.dollar_diff), 2) AS diff
+FROM daily_values dv
+INNER JOIN monthly_values mv ON DATE_FORMAT(dv.request_date, '%Y-%m') = mv.ym
+WHERE mv.dollar_diff > dv.dollar_diff
+;

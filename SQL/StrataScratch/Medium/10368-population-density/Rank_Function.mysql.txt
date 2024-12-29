@@ -1,0 +1,15 @@
+SELECT city
+    , country
+    , density
+FROM (
+    SELECT city
+        , country
+        , ROUND(population / area, 0) AS density
+        , DENSE_RANK() OVER (ORDER BY ROUND(population / area, 0) DESC) AS density_rank_high
+        , DENSE_RANK() OVER (ORDER BY ROUND(population / area, 0)) AS density_rank_low
+    FROM cities_population
+    WHERE area > 0
+) a
+WHERE density_rank_high = 1
+   OR density_rank_low = 1
+;

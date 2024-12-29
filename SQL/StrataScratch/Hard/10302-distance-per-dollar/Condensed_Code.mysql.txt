@@ -1,0 +1,13 @@
+WITH summary AS (
+    SELECT DATE_FORMAT(request_date, '%Y-%m') AS ym
+        , request_date
+        , ROUND(ABS(AVG(distance_to_travel / monetary_cost) OVER (PARTITION BY DATE_FORMAT(request_date, '%Y-%m')) - AVG(distance_to_travel / monetary_cost)), 2) AS ym_avg
+    FROM uber_request_logs
+    GROUP BY DATE_FORMAT(request_date, '%Y-%m')
+        , request_date
+)
+
+SELECT DISTINCT ym
+    , ym_avg
+FROM summary
+;

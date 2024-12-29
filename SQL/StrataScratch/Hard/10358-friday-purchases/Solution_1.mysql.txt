@@ -1,0 +1,5 @@
+SELECT WEEK(date) AS spend_week
+    , COALESCE(AVG(CASE WHEN day_name = 'Friday' THEN amount_spent ELSE null END), 0) AS spend
+FROM user_purchases up
+GROUP BY WEEK(date)
+;

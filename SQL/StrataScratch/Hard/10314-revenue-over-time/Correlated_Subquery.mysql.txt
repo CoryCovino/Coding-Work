@@ -1,0 +1,12 @@
+WITH summary AS (
+    SELECT LAST_DAY(created_at) AS eom
+        , SUM(purchase_amt) AS total_purchase_amount
+    FROM amazon_purchases
+    WHERE purchase_amt > 0
+    GROUP BY LAST_DAY(created_at)
+)
+
+SELECT DATE_FORMAT(s.eom, '%Y-%m') AS month
+    , (SELECT AVG(s2.total_purchase_amount) FROM summary s2 WHERE s2.eom BETWEEN DATE_ADD(s.eom, INTERVAL -2 MONTH) AND s.eom) AS avg_revenue
+FROM summary s
+;

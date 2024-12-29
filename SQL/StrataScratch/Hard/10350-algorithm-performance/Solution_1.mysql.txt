@@ -1,0 +1,24 @@
+WITH summary AS (
+    SELECT search_id
+    , CASE WHEN clicked = 0
+           THEN 1
+           
+           WHEN clicked = 1 
+            AND search_results_position > 3
+           THEN 2
+           
+           ELSE 3
+            END AS rating
+    FROM fb_search_events
+    ORDER BY search_id  
+)
+
+SELECT DISTINCT search_id
+    , rating
+FROM (
+    SELECT *
+        , DENSE_RANK() OVER (PARTITION BY search_id ORDER BY rating DESC) AS rating_rank
+    FROM summary
+) a
+WHERE rating_rank = 1
+;

@@ -1,0 +1,9 @@
+SELECT os.user_id
+    , os.order_date
+    , COUNT(DISTINCT os.order_id) AS num_orders
+    , SUM(os.order_value) AS total_order_value
+FROM order_summary os
+INNER JOIN (SELECT DISTINCT user_id, session_date FROM sessions) s ON os.order_date = s.session_date AND os.user_id = s.user_id
+GROUP BY order_date
+    , user_id
+;

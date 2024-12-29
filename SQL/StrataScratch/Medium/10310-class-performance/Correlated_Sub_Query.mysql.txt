@@ -1,0 +1,23 @@
+WITH summary AS (
+    SELECT id
+        , student
+        , SUM(assignment1 + assignment2 + assignment3) AS total_score
+        , DENSE_RANK() OVER (ORDER BY SUM(assignment1 + assignment2 + assignment3) DESC) AS score_rank
+    FROM box_scores
+    GROUP BY id
+        , student
+
+), ranked_data AS (
+    SELECT id
+        , student
+        , total_score
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.total_score > s.total_score) AS score_rank
+    FROM summary s
+)
+
+SELECT rd.total_score - (SELECT total_score FROM ranked_data WHERE score_rank = 10) AS score_diff
+FROM ranked_data rd
+WHERE rd.score_rank = 1
+;

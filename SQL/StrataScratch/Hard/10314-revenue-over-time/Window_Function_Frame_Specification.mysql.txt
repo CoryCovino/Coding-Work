@@ -1,0 +1,12 @@
+WITH summary AS (
+    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym
+        , SUM(purchase_amt) AS total_purchase_amt
+    FROM amazon_purchases
+    WHERE purchase_amt > 0
+    GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+)
+
+SELECT ym
+    , AVG(total_purchase_amt) OVER (ORDER BY ym ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_revenue
+FROM summary
+;

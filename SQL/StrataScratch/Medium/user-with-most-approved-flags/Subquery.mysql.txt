@@ -1,0 +1,15 @@
+WITH summary AS (
+    SELECT CONCAT(uf.user_firstname, ' ', uf.user_lastname) AS username
+        , COUNT(DISTINCT video_id) AS num_videos
+    FROM user_flags uf
+    INNER JOIN flag_review fr ON uf.flag_id = fr.flag_id
+                             AND fr.reviewed_outcome = 'APPROVED'
+    WHERE uf.user_firstname IS NOT NULL 
+      AND uf.user_lastname IS NOT NULL
+    GROUP BY CONCAT(uf.user_firstname, ' ', uf.user_lastname)
+)
+
+SELECT username
+FROM summary
+WHERE num_videos = (SELECT MAX(num_videos) FROM summary)
+;

@@ -1,0 +1,6 @@
+SELECT DATE_SUB(`week`, INTERVAL (DAYOFWEEK(`week`) - 1) DAY) AS process_week
+    , SUM(quantity)
+FROM orders_analysis
+WHERE DATE_SUB(`week`, INTERVAL (DAYOFWEEK(`week`) - 1) DAY) < '2023-04-01'
+GROUP BY DATE_SUB(`week`, INTERVAL (DAYOFWEEK(`week`) - 1) DAY)
+;

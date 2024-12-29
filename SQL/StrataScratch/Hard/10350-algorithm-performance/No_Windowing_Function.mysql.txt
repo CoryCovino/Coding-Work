@@ -1,0 +1,26 @@
+WITH summary AS (
+    SELECT search_id
+    , CASE WHEN clicked = 0
+           THEN 1
+           
+           WHEN clicked = 1 
+            AND search_results_position > 3
+           THEN 2
+           
+           ELSE 3
+            END AS rating
+    FROM fb_search_events
+    ORDER BY search_id  
+)
+
+SELECT DISTINCT search_id
+    , rating
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.search_id = s.search_id AND s2.rating > s.rating) AS rating_rank
+    FROM summary s
+) a
+WHERE rating_rank = 1
+;

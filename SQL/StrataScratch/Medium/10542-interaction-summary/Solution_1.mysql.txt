@@ -1,0 +1,27 @@
+WITH all_customers AS (
+    SELECT customer_id
+    FROM customer_interactions
+    
+    UNION
+    
+    SELECT customer_id
+    FROM user_content
+)
+
+SELECT ac.customer_id
+    , COALESCE(ints.num_ints, 0) AS total_interactions
+    , COALESCE(conts.num_conts, 0) AS total_content_items
+FROM all_customers ac
+LEFT OUTER JOIN (
+    SELECT customer_id
+        , COUNT(DISTINCT interaction_id) AS num_ints
+    FROM customer_interactions
+    GROUP BY customer_id
+) ints ON ac.customer_id = ints.customer_id
+LEFT OUTER JOIN (
+    SELECT customer_id
+        , COUNT(DISTINCT content_id) AS num_conts
+    FROM user_content
+    GROUP BY customer_id
+) conts ON ac.customer_id = conts.customer_id
+;

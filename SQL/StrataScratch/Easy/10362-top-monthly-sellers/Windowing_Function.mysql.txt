@@ -1,0 +1,24 @@
+WITH summary_data AS (
+    SELECT product_category
+        , seller_id
+        , total_sales
+        , market_place
+        , sales_date
+    FROM sales_data
+    WHERE MONTH(sales_date) = 1
+)
+
+SELECT product_category
+    , seller_id
+    , total_sales
+    , market_place
+    , sales_date
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+           FROM summary_data s2
+           WHERE s.product_category = s2.product_category
+             AND s2.total_sales > s.total_sales) sales_rank
+    FROM summary_data s
+) a
+WHERE sales_rank <= 3;

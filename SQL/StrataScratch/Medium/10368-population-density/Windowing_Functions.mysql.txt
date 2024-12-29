@@ -1,0 +1,15 @@
+SELECT city
+    , country
+    , density
+FROM (
+    SELECT city
+        , country
+        , ROUND(population / area, 0) AS density
+        , FIRST_VALUE(ROUND(population / area, 0)) OVER (ORDER BY ROUND(population / area, 0) DESC) AS max_value
+        , FIRST_VALUE(ROUND(population / area, 0)) OVER (ORDER BY ROUND(population / area, 0)) AS min_value
+    FROM cities_population
+    WHERE area > 0
+) a
+WHERE density = max_value
+   OR density = min_value
+;

@@ -1,0 +1,8 @@
+SELECT pa.country
+    , ROUND(COUNT(DISTINCT user_id) / (SELECT COUNT(DISTINCT pa2.user_id) FROM penetration_analysis pa2 WHERE pa.country = pa2.country GROUP BY pa2.country), 2) AS total_users
+FROM penetration_analysis pa
+WHERE pa.last_active_date >= DATE_ADD('2024-01-31', INTERVAL -30 day)
+  AND pa.sessions >= 5
+  AND pa.listening_hours >= 10
+GROUP BY pa.country
+;
