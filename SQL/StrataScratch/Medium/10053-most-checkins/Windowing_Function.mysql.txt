@@ -1,0 +1,12 @@
+SELECT business_id
+    , checkins
+FROM (
+    SELECT business_id
+        , checkins
+        , DENSE_RANK() OVER (ORDER BY checkins DESC) AS c_rank
+    FROM yelp_checkin
+    GROUP BY business_id
+) a
+WHERE c_rank <= 5
+ORDER BY c_rank
+;

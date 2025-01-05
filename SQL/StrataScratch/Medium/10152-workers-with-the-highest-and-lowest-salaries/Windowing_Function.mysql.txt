@@ -1,0 +1,24 @@
+WITH summary AS (
+    SELECT worker_id
+        , salary
+        , department
+        , DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM worker
+)
+
+SELECT worker_id
+    , salary
+    , department
+    , 'Highest Salary' AS salary_type
+FROM summary
+WHERE salary_rank = 1
+
+UNION
+
+SELECT worker_id
+    , salary
+    , department
+    , 'Lowest Salary' AS salary_type
+FROM summary
+WHERE salary_rank = (SELECT MAX(salary_rank) FROM summary)
+;

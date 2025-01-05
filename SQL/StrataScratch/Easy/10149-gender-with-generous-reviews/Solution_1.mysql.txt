@@ -1,0 +1,9 @@
+SELECT ag.gender
+    , AVG(ar.review_score) AS avg_score
+FROM airbnb_reviews ar
+LEFT OUTER JOIN airbnb_guests ag ON ar.from_user = ag.guest_id
+WHERE ar.from_type = 'guest'
+GROUP BY ag.gender
+ORDER BY AVG(ar.review_score) DESC
+LIMIT 1
+;

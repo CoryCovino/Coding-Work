@@ -1,0 +1,4 @@
+SELECT DISTINCT song_name
+FROM billboard_top_100_year_end
+WHERE YEAR(CURRENT_DATE) - year <= 20
+  AND year_rank = 1;

@@ -1,0 +1,4 @@
+SELECT COUNT(DISTINCT c.id)
+FROM customers c
+WHERE c.id NOT IN (SELECT cust_id FROM orders)
+;

@@ -1,0 +1,11 @@
+SELECT business_name
+    , cool
+    , funny
+    , review_date
+    , review_id
+    , review_text
+    , CAST(stars AS UNSIGNED) AS stars
+    , useful
+    , user_id
+FROM yelp_reviews
+WHERE REGEXP_LIKE(stars, '[0-9]');

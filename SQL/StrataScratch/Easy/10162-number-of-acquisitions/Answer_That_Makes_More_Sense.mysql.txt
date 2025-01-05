@@ -1,0 +1,6 @@
+SELECT CONCAT(YEAR(acquired_at), '-', LPAD(QUARTER(acquired_at), 2, '0')) AS acq_quarter
+    , COUNT(*)
+FROM crunchbase_acquisitions
+GROUP BY CONCAT(YEAR(acquired_at), '-', LPAD(QUARTER(acquired_at), 2, '0'))
+ORDER BY COUNT(*) DESC
+;

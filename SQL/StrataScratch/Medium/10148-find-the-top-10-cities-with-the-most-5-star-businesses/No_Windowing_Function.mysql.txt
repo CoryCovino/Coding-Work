@@ -1,0 +1,21 @@
+WITH summary AS (
+    SELECT city
+        , COUNT(*) rating_count
+    FROM yelp_business
+    WHERE stars = 5
+    GROUP BY city
+)
+
+SELECT city
+    , rating_count
+FROM (
+    SELECT s.city
+        , rating_count
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.rating_count > s.rating_count) AS rating_rank
+    FROM summary s
+) a
+WHERE rating_rank <= 5
+ORDER BY rating_rank
+;

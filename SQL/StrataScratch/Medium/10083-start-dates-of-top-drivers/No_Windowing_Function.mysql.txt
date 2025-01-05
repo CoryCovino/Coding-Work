@@ -1,0 +1,12 @@
+SELECT start_date
+FROM (
+    SELECT l.start_date
+        , (SELECT COUNT(*) + 1
+            FROM lyft_drivers l2
+            WHERE l2.yearly_salary > l.yearly_salary
+              AND l2.end_date IS NULL) AS salary_rank
+    FROM lyft_drivers l
+    WHERE l.end_date IS NULL
+) a
+WHERE salary_rank <= 5
+;

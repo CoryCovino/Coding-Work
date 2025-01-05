@@ -1,0 +1,6 @@
+SELECT day_of_week
+    , COUNT(*) AS num_incidents
+FROM sf_crime_incidents_2014_01
+GROUP BY day_of_week
+ORDER BY COUNT(*) DESC
+;

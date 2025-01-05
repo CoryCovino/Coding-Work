@@ -1,0 +1,9 @@
+SELECT e.to_user
+    , COUNT(CASE WHEN label = 'Promotion' THEN e.to_user ELSE NULL END) AS promotion_count
+    , COUNT(CASE WHEN label = 'Social' THEN e.to_user ELSE NULL END) AS social_count
+    , COUNT(CASE WHEN label = 'Shopping' THEN e.to_user ELSE NULL END) AS shopping_count
+FROM google_gmail_emails e
+INNER JOIN google_gmail_labels l ON e.id = l.email_id
+WHERE l.label IN ('Promotion', 'Shopping', 'Social')
+GROUP BY e.to_user
+;

@@ -1,0 +1,4 @@
+SELECT COUNT(*)
+FROM yelp_reviews
+WHERE business_name = 'Lo-Lo\'s Chicken & Waffles'
+  AND stars = 5;

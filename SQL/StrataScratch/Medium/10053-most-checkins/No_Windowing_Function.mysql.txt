@@ -1,0 +1,14 @@
+SELECT business_id
+    , checkins
+FROM (
+    SELECT y.business_id
+        , y.checkins
+        , (SELECT COUNT(*) + 1
+            FROM yelp_checkin y2
+            WHERE y2.checkins > y.checkins) AS c_rank
+    FROM yelp_checkin y
+    GROUP BY y.business_id
+) a
+WHERE c_rank <= 5
+ORDER BY c_rank
+;

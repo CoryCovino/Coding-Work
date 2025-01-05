@@ -1,0 +1,16 @@
+WITH fav AS (
+    SELECT from_user
+        , MAX(review_score) AS max_score
+    FROM airbnb_reviews
+    WHERE from_type = 'guest'
+    GROUP BY from_user
+)
+
+SELECT DISTINCT r.from_user
+    , h.nationality
+FROM fav f
+INNER JOIN airbnb_reviews r ON f.from_user = r.from_user
+                           AND f.max_score = r.review_score
+                           AND r.from_type = 'guest'
+INNER JOIN airbnb_hosts h ON r.to_user = h.host_id
+;

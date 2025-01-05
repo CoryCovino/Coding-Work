@@ -1,0 +1,11 @@
+SELECT top_genre
+FROM nominee_information
+WHERE name = (
+SELECT n.name
+FROM oscar_nominees o
+INNER JOIN nominee_information n ON o.nominee = n.name
+WHERE o.winner = 1
+GROUP BY n.name
+ORDER BY SUM(o.winner) DESC, n.name
+LIMIT 1
+);

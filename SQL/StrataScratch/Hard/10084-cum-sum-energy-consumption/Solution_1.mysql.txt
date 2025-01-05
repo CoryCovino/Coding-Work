@@ -1,0 +1,20 @@
+WITH dates AS (
+    SELECT date, consumption
+    FROM fb_eu_energy
+    
+    UNION ALL
+    
+    SELECT date, consumption
+    FROM fb_na_energy
+    
+    UNION ALL
+    
+    SELECT date, consumption
+    FROM fb_asia_energy
+) 
+
+SELECT DISTINCT d.date
+    , SUM(consumption) OVER (ORDER BY date) AS total
+    , ROUND((SUM(consumption) OVER (ORDER BY date) / (SELECT SUM(consumption) FROM dates)) * 100, 0) AS pec
+FROM dates d
+;

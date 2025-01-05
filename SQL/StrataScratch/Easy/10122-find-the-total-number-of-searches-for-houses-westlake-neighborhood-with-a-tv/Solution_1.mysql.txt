@@ -1,0 +1,4 @@
+SELECT COUNT(*)
+FROM airbnb_search_details
+WHERE amenities LIKE '%TV%'
+  AND neighbourhood = 'Westlake';

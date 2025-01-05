@@ -1,0 +1,4 @@
+SELECT COUNT(DISTINCT fp.post_id)
+FROM facebook_posts fp
+INNER JOIN facebook_reactions fr ON fp.post_id = fr.post_id
+WHERE fr.reaction = 'like';

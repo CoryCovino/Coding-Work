@@ -1,0 +1,9 @@
+SELECT gge.to_user
+    , ggl.label
+    , COUNT(*)
+FROM google_gmail_emails gge
+INNER JOIN google_gmail_labels ggl ON gge.id = ggl.email_id
+                                  AND LOWER(ggl.label) LIKE 'custom%'
+GROUP BY gge.to_user
+    , ggl.label
+;

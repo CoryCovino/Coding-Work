@@ -1,0 +1,3 @@
+SELECT * 
+FROM yelp_reviews
+WHERE NOT REGEXP_LIKE(stars, '[0-9]');

@@ -1,0 +1,12 @@
+SELECT purpose
+    , num_miles
+FROM (
+    SELECT purpose
+        , SUM(miles) AS num_miles
+        , DENSE_RANK() OVER (ORDER BY SUM(miles) DESC) AS mile_rank
+    FROM my_uber_drives
+    WHERE category = 'Business'
+    GROUP BY purpose
+) a
+WHERE mile_rank <= 3
+;

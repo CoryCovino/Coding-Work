@@ -1,0 +1,7 @@
+SELECT team
+    , AVG(weight) AS avg_weight
+FROM olympics_athletes_events
+WHERE sport = 'Judo'
+  AND medal != ''
+GROUP BY team
+;

@@ -1,0 +1,8 @@
+SELECT us.trackname
+    , COUNT(*) AS days_at_number_one
+FROM spotify_daily_rankings_2017_us us
+INNER JOIN spotify_worldwide_daily_song_ranking w ON us.url = w.url
+                                                 AND us.position = 1
+                                                 AND w.position = 1
+                                                 AND us.date = w.date
+GROUP BY us.trackname;
