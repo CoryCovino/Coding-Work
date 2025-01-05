@@ -1,0 +1,26 @@
+WITH summary AS (
+    SELECT w.worker_id
+        , w.salary
+        , w.department
+        , (SELECT COUNT(*) + 1
+            FROM worker w2
+            WHERE w2.salary > w.salary) AS salary_rank
+    FROM worker w
+)
+
+SELECT worker_id
+    , salary
+    , department
+    , 'Highest Salary' AS salary_type
+FROM summary
+WHERE salary_rank = 1
+
+UNION
+
+SELECT worker_id
+    , salary
+    , department
+    , 'Lowest Salary' AS salary_type
+FROM summary
+WHERE salary_rank = (SELECT MAX(salary_rank) FROM summary)
+;

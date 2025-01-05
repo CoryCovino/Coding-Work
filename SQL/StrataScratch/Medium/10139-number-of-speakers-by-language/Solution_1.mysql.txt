@@ -1,0 +1,9 @@
+SELECT pe.location
+    , pu.language
+    , COUNT(DISTINCT pu.user_id) AS num_people
+FROM playbook_events pe
+INNER JOIN playbook_users pu ON pe.user_id = pu.user_id
+GROUP BY pe.location
+    , pu.language
+ORDER BY pe.location
+;

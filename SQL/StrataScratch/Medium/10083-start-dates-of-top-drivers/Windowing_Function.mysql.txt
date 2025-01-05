@@ -1,0 +1,9 @@
+SELECT start_date
+FROM (
+    SELECT start_date
+        , DENSE_RANK() OVER (ORDER BY yearly_salary DESC) AS salary_rank
+    FROM lyft_drivers
+    WHERE end_date IS NULL
+) a
+WHERE salary_rank <= 5
+;

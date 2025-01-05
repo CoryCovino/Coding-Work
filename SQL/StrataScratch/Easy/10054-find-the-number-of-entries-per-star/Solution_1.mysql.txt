@@ -1,0 +1,5 @@
+SELECT stars
+    , COUNT(*)
+FROM yelp_reviews
+GROUP BY stars
+ORDER BY COUNT(*);

@@ -1,0 +1,9 @@
+SELECT employeename
+    , MAX(CASE WHEN year = 2011 THEN totalpay ELSE 0 END) AS 2011_pay
+    , MAX(CASE WHEN year = 2012 THEN totalpay ELSE 0 END) AS 2012_pay
+    , MAX(CASE WHEN year = 2013 THEN totalpay ELSE 0 END) AS 2013_pay
+    , MAX(CASE WHEN year = 2014 THEN totalpay ELSE 0 END) AS 2014_pay
+FROM sf_public_salaries
+GROUP BY employeename
+ORDER BY employeename
+;

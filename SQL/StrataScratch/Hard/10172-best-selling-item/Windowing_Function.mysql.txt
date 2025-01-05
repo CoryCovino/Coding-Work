@@ -1,0 +1,17 @@
+WITH summary AS (
+    SELECT MONTH(invoicedate) AS month_num
+        , description
+        , SUM(unitprice * quantity) AS total_paid
+        , DENSE_RANK() OVER (PARTITION BY MONTH(invoicedate) ORDER BY SUM(unitprice * quantity) DESC) AS total_paid_rank
+    FROM online_retail
+    GROUP BY MONTH(invoicedate)
+        , description
+)
+
+SELECT s.month_num
+    , s.description
+    , s.total_paid
+FROM summary s
+WHERE total_paid_rank = 1
+ORDER BY s.month_num
+;

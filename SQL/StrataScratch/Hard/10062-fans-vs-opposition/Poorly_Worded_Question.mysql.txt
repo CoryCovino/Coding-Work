@@ -1,0 +1,13 @@
+WITH rankings AS (
+    SELECT employee_id
+        , ROW_NUMBER() OVER (ORDER BY popularity DESC, employee_id) AS high_pop
+        , ROW_NUMBER() OVER (ORDER BY popularity, employee_id) AS low_pop
+    FROM facebook_hack_survey
+)
+
+SELECT h.employee_id
+    , l.employee_id
+FROM rankings h
+INNER JOIN rankings l ON h.high_pop = l.low_pop
+ORDER BY h.employee_id
+;

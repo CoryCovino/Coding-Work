@@ -1,0 +1,24 @@
+WITH summary AS (
+    SELECT MONTH(invoicedate) AS month_num
+        , description
+        , SUM(unitprice * quantity) AS total_paid
+    FROM online_retail
+    GROUP BY MONTH(invoicedate)
+        , description
+)
+
+SELECT month_num
+    , description
+    , total_paid
+FROM (
+    SELECT s.month_num
+        , s.description
+        , s.total_paid
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.total_paid > s.total_paid
+              AND s2.month_num = s.month_num) AS total_paid_rank
+    FROM summary s
+) a
+WHERE total_paid_rank = 1
+ORDER BY month_num;

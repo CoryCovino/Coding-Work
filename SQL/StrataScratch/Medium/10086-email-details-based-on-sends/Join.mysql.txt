@@ -1,0 +1,10 @@
+WITH summary AS (
+    SELECT day
+    FROM google_gmail_emails
+    GROUP BY day
+    HAVING COUNT(DISTINCT to_user) > COUNT(DISTINCT from_user)
+)
+SELECT gge.*
+FROM google_gmail_emails gge
+INNER JOIN summary s ON gge.day = s.day
+;

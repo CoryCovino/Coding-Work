@@ -1,0 +1,25 @@
+WITH combined AS (
+    SELECT user1 AS user_name
+        , SUM(msg_count) AS num_messages
+    FROM fb_messages
+    GROUP BY user1
+
+    UNION 
+    
+    SELECT user2
+        , SUM(msg_count)
+    FROM fb_messages
+    GROUP BY user2
+)
+
+SELECT user_name
+    , num_messages
+FROM (
+    SELECT user_name
+        , SUM(num_messages) AS num_messages
+        , DENSE_RANK() OVER (ORDER BY SUM(num_messages) DESC) AS message_rank
+    FROM combined
+    GROUP BY user_name
+) a
+WHERE message_rank <= 10
+;

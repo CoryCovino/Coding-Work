@@ -1,0 +1,4 @@
+SELECT state
+    , AVG(stars) AS avg_stars
+FROM yelp_business
+GROUP BY state;

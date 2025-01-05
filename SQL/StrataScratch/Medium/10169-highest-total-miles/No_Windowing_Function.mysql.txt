@@ -1,0 +1,20 @@
+WITH summary AS (
+    SELECT purpose
+        , SUM(miles) AS num_miles
+    FROM my_uber_drives
+    WHERE category = 'Business'
+    GROUP BY purpose
+)
+
+SELECT purpose
+    , num_miles
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.num_miles > s.num_miles) AS mile_rank
+    FROM summary s
+) a
+WHERE mile_rank <= 3
+ORDER BY mile_rank
+;

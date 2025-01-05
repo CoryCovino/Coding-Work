@@ -1,0 +1,12 @@
+SELECT 0 AS has_bonus
+    , COUNT(DISTINCT CASE WHEN b.worker_ref_id IS NULL THEN e.id ELSE NULL END)
+FROM employee e
+LEFT OUTER JOIN bonus b ON e.id = b.worker_ref_id 
+
+UNION
+
+SELECT 1 AS has_bonus
+    , COUNT(DISTINCT CASE WHEN b.worker_ref_id IS NOT NULL THEN b.worker_ref_id ELSE NULL END)
+FROM employee e
+LEFT OUTER JOIN bonus b ON e.id = b.worker_ref_id 
+;

@@ -1,0 +1,5 @@
+SELECT DISTINCT p1.country
+FROM winemag_p1 p1
+WHERE p1.country NOT IN (SELECT DISTINCT country FROM winemag_p2)
+ORDER BY p1.country
+;

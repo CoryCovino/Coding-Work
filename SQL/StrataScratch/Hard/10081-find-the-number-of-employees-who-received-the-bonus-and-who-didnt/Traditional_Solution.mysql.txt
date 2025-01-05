@@ -1,0 +1,13 @@
+SELECT has_bonus
+    , COUNT(DISTINCT a.id) AS num_employees
+FROM (
+    SELECT e.id
+        , CASE WHEN b.bonus_date IS NULL 
+               THEN 0 
+               ELSE 1
+                END AS has_bonus
+    FROM employee e
+    LEFT OUTER JOIN bonus b ON e.id = b.worker_ref_id
+) a
+GROUP BY has_bonus
+;

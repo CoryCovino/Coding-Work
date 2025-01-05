@@ -1,0 +1,11 @@
+SELECT pu.company_id
+    , pu.language
+    , COUNT(*) AS num_events
+FROM playbook_events pe
+INNER JOIN playbook_users pu ON pe.user_id = pu.user_id
+                            AND pu.language != 'spanish'
+WHERE pe.location = 'Argentina'
+  AND pe.device = 'macbook pro'
+GROUP BY pu.company_id
+    , pu.language
+;

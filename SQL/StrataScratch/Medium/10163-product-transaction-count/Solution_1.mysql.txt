@@ -1,0 +1,6 @@
+SELECT id.product_name
+    , COUNT(DISTINCT t.transaction_id) AS num_transactions
+FROM excel_sql_inventory_data id
+INNER JOIN excel_sql_transaction_data t ON id.product_id = t.product_id
+GROUP BY id.product_name
+ORDER BY id.product_id;

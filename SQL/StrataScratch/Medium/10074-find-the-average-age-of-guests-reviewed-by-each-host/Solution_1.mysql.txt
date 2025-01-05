@@ -1,0 +1,6 @@
+SELECT r.from_user
+    , AVG(g.age) AS average_age
+FROM airbnb_reviews r
+INNER JOIN airbnb_guests g ON r.to_user = g.guest_id
+WHERE r.from_type = 'host'
+GROUP BY r.from_user;

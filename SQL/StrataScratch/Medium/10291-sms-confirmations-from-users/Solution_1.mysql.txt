@@ -1,0 +1,6 @@
+SELECT ROUND((SUM(CASE WHEN c.date IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*)) * 100, 0) AS pct_successful
+FROM fb_sms_sends s
+LEFT OUTER JOIN fb_confirmers c ON s.phone_number = c.phone_number
+                               AND s.ds = c.date
+WHERE s.type = 'message'
+  AND s.ds = '2020-08-04 00:00:00';

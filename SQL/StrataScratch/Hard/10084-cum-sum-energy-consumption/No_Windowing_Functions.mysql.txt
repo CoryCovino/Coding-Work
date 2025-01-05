@@ -1,0 +1,33 @@
+WITH dates AS (
+    SELECT date, consumption
+    FROM fb_eu_energy
+    
+    UNION ALL
+    
+    SELECT date, consumption
+    FROM fb_na_energy
+    
+    UNION ALL
+    
+    SELECT date, consumption
+    FROM fb_asia_energy
+
+), summary AS ( 
+    SELECT date
+        , SUM(consumption) AS daily_consumption
+    FROM dates
+    GROUP BY date
+)
+
+SELECT date
+    , cumulative_sum
+    , ROUND((cumulative_sum / (SELECT SUM(daily_consumption) FROM summary)) * 100, 0) AS pec
+FROM (    
+    SELECT DISTINCT s.date
+        , (SELECT SUM(s2.daily_consumption) AS amt
+            FROM summary s2
+            WHERE s2.date <= s.date) AS cumulative_sum
+    FROM summary s
+    ORDER BY s.date
+) a
+;

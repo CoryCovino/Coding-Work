@@ -1,0 +1,3 @@
+SELECT COUNT(DISTINCT business_id)
+FROM yelp_business
+WHERE categories LIKE '%pizza%';

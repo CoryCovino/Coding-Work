@@ -1,0 +1,3 @@
+SELECT SUM(sales_revenue)
+FROM sales_performance
+WHERE salesperson IN ('Samantha', 'Lisa');

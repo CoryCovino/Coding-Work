@@ -1,0 +1,5 @@
+SELECT CASE WHEN SUM(is_senior) > COUNT(CASE WHEN location = 'USA' THEN id ELSE NULL END)
+            THEN 'More seniors'
+            ELSE 'Fewer seniors'
+             END AS comparison
+FROM facebook_employees;

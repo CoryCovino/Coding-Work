@@ -1,0 +1,7 @@
+SELECT ah.nationality
+    , SUM(aa.n_beds) AS num_beds
+FROM airbnb_apartments aa
+INNER JOIN airbnb_hosts ah ON aa.host_id = ah.host_id
+GROUP BY ah.nationality
+ORDER BY SUM(aa.n_beds) DESC
+;

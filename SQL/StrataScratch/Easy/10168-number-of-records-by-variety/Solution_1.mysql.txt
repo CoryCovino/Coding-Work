@@ -1,0 +1,5 @@
+SELECT variety
+    , COUNT(*)
+FROM iris
+GROUP BY variety
+ORDER BY variety;

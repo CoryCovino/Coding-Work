@@ -1,0 +1,21 @@
+SELECT num_comments
+    , COUNT(*) AS num_users
+FROM (
+    SELECT user_id
+        , COUNT(created_at) AS num_comments
+    FROM (
+        SELECT DATE_FORMAT(fc.created_at, '%Y-%m') AS ym
+            , fc.user_id
+            , fc.created_at
+            , fu.joined_at
+        FROM fb_users fu
+        INNER JOIN fb_comments fc ON fu.id = fc.user_id
+                                 AND fc.created_at >= fu.joined_at
+        WHERE fu.joined_at >= '2018-01-01' AND fu.joined_at < '2021-01-01'
+    ) a
+    WHERE ym = '2020-01'
+    GROUP BY user_id
+) a
+GROUP BY num_comments
+ORDER BY num_comments
+;

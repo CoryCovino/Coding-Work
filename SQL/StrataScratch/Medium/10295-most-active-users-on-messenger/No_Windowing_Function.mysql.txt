@@ -1,0 +1,33 @@
+WITH combined AS (
+    SELECT user1 AS user_name
+        , SUM(msg_count) AS num_messages
+    FROM fb_messages
+    GROUP BY user1
+
+    UNION 
+    
+    SELECT user2
+        , SUM(msg_count)
+    FROM fb_messages
+    GROUP BY user2
+
+), totals AS (
+    SELECT user_name
+        , SUM(num_messages) AS num_messages
+    FROM combined
+    GROUP BY user_name
+)
+
+SELECT user_name
+    , num_messages
+FROM (
+    SELECT user_name
+        , num_messages
+        , (SELECT COUNT(*) + 1
+            FROM totals t2
+            WHERE t2.num_messages > t1.num_messages) AS message_rank
+    FROM totals t1
+) a
+WHERE message_rank <= 10
+ORDER BY message_rank
+;

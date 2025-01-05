@@ -1,0 +1,11 @@
+SELECT guest_id
+    , age_rank
+FROM (
+    SELECT g.guest_id
+        , g.age
+        , (SELECT COUNT(*) + 1
+            FROM airbnb_guests g2
+            WHERE g2.age > g.age) AS age_rank
+    FROM airbnb_guests g
+) a
+ORDER BY age_rank;

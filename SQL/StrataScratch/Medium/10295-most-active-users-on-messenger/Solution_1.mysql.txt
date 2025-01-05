@@ -1,0 +1,25 @@
+WITH combined AS (
+    SELECT user1
+        , SUM(msg_count) AS num_messages
+    FROM fb_messages
+    GROUP BY user1
+
+    UNION 
+    
+    SELECT user2
+        , SUM(msg_count)
+    FROM fb_messages
+    GROUP BY user2
+
+), total AS (
+    SELECT user1 AS user_name
+        , SUM(num_messages) AS num_messages
+    FROM combined
+    GROUP BY user1
+)
+
+SELECT *
+FROM total
+ORDER BY num_messages DESC
+LIMIT 10
+;

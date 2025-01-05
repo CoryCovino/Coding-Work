@@ -1,0 +1,5 @@
+SELECT year
+    , SUM(south + northeast + midwest + west) AS total
+FROM housing_units_completed_us
+GROUP BY year
+ORDER BY year;

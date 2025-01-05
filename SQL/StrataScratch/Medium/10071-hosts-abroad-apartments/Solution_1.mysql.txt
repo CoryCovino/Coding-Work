@@ -1,0 +1,4 @@
+SELECT COUNT(DISTINCT h.host_id)
+FROM airbnb_hosts h
+INNER JOIN airbnb_apartments a ON h.host_id = a.host_id
+                              AND h.nationality != a.country;

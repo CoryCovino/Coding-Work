@@ -1,0 +1,18 @@
+SELECT worker_id
+    , salary
+    , department
+    , CASE WHEN salary = max_salary 
+           THEN 'Highest Salary'
+           ELSE 'Lowest Salary'
+            END AS salary_type
+FROM (
+    SELECT worker_id
+        , salary
+        , department
+        , MAX(salary) OVER () AS max_salary
+        , MIN(salary) OVER () AS min_salary
+    FROM worker
+) a
+WHERE salary = max_salary
+   OR salary = min_salary
+;

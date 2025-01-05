@@ -1,0 +1,5 @@
+SELECT COUNT(DISTINCT c.id)
+FROM orders o
+RIGHT OUTER JOIN customers c ON c.id = o.cust_id
+WHERE o.cust_id IS NULL
+;

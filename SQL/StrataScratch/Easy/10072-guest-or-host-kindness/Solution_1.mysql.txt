@@ -1,0 +1,6 @@
+SELECT from_type
+    , AVG(review_score) AS avg_review_score
+FROM airbnb_reviews
+GROUP BY from_type
+ORDER BY AVG(review_score) DESC
+LIMIT 1;

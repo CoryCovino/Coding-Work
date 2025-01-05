@@ -1,0 +1,18 @@
+WITH summary AS (
+    SELECT MONTH(invoicedate) AS month_num
+        , description
+        , SUM(unitprice * quantity) AS total_paid
+    FROM online_retail
+    GROUP BY MONTH(invoicedate)
+        , description
+)
+
+SELECT s.*
+FROM summary s
+INNER JOIN (SELECT month_num
+                , MAX(total_paid) AS total_paid
+            FROM summary
+            GROUP BY month_num
+) max_data ON s.month_num = max_data.month_num
+          AND s.total_paid = max_data.total_paid
+ORDER BY s.month_num
