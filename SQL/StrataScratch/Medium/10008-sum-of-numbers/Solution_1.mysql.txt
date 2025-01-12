@@ -1,0 +1,8 @@
+SELECT SUM(CASE WHEN `index` < 5 THEN number ELSE 0 END) AS total
+FROM transportation_numbers
+
+UNION ALL
+
+SELECT SUM(CASE WHEN `index` > 5 THEN number ELSE 0 END)
+FROM transportation_numbers
+;

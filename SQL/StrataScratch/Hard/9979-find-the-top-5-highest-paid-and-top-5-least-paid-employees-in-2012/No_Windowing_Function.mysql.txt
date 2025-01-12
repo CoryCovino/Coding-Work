@@ -1,0 +1,23 @@
+WITH summary AS (
+    SELECT employeename
+        , totalpaybenefits
+    FROM sf_public_salaries
+    WHERE year = 2012
+)
+
+SELECT employeename
+    , totalpaybenefits
+FROM (
+    SELECT s1.*
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.totalpaybenefits > s1.totalpaybenefits) AS high_pay_rank
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.totalpaybenefits < s1.totalpaybenefits) AS low_pay_rank
+    FROM summary s1
+) a
+WHERE high_pay_rank <= 5
+   OR low_pay_rank <= 5
+ORDER BY totalpaybenefits
+;

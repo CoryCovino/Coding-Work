@@ -1,0 +1,30 @@
+WITH varieties AS (
+    SELECT DISTINCT region_1 AS region
+        , variety
+        , price
+    FROM winemag_p1
+    
+    UNION 
+    
+    SELECT DISTINCT region_2
+        , variety
+        , price
+    FROM winemag_p1
+)
+
+SELECT a.region
+    , v_min.variety
+    , v_max.variety
+FROM (
+    SELECT region
+        , MIN(price) AS min_price
+        , MAX(price) AS max_price
+    FROM varieties
+    GROUP BY region
+) a
+INNER JOIN varieties v_min ON a.region = v_min.region
+                      AND a.min_price = v_min.price
+INNER JOIN varieties v_max ON a.region = v_max.region
+                      AND a.max_price = v_max.price
+ORDER BY a.region
+;

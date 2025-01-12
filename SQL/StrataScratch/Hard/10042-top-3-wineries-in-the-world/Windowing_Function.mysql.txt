@@ -1,0 +1,18 @@
+WITH summary AS (
+    SELECT country
+        , winery
+        , ROUND(AVG(points), 0) AS points
+        , ROW_NUMBER() OVER (PARTITION BY country ORDER BY AVG(points) DESC, winery) AS point_rank
+    FROM winemag_p1
+    GROUP BY country
+        , winery
+)
+
+SELECT country
+    , MAX(CASE WHEN point_rank = 1 THEN CONCAT(winery, ' (', points, ')') ELSE NULL END) AS top_winery
+    , COALESCE(MAX(CASE WHEN point_rank = 2 THEN CONCAT(winery, ' (', points, ')') ELSE NULL END), 'No second winery') AS second_winery
+    , COALESCE(MAX(CASE WHEN point_rank = 3 THEN CONCAT(winery, ' (', points, ')') ELSE NULL END), 'No third winery') AS third_winery
+FROM summary
+WHERE point_rank IN (1, 2, 3)
+GROUP BY country
+;

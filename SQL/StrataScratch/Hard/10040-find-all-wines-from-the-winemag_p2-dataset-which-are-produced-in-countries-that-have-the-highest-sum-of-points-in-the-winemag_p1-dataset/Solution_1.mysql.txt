@@ -1,0 +1,9 @@
+SELECT p2.*
+FROM winemag_p2 p2
+INNER JOIN (
+    SELECT country
+    FROM winemag_p1
+    GROUP BY country
+    ORDER BY SUM(points) DESC
+    LIMIT 1) max_country ON p2.country = max_country.country
+;

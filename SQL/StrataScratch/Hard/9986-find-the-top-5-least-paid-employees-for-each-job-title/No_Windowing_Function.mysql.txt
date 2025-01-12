@@ -1,0 +1,24 @@
+WITH summary AS (
+    SELECT jobtitle
+        , employeename
+        , totalpaybenefits
+    FROM sf_public_salaries
+
+), ranks AS (
+    SELECT s1.jobtitle
+        , s1.employeename
+        , s1.totalpaybenefits
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.jobtitle = s1.jobtitle
+              AND s2.totalpaybenefits < s1.totalpaybenefits) AS pay_rank
+    FROM summary s1
+)
+
+SELECT employeename
+    , jobtitle
+    , totalpaybenefits
+FROM ranks
+WHERE pay_rank <= 5
+ORDER BY jobtitle, totalpaybenefits
+;

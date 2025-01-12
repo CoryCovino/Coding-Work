@@ -1,0 +1,19 @@
+WITH summary AS (
+    SELECT year
+        , AVG(height) AS avg_height
+    FROM (
+        SELECT DISTINCT year
+            , id
+            , height
+        FROM olympics_athletes_events
+        WHERE sex = 'M'
+    ) a
+    GROUP BY year
+)
+
+SELECT year
+    , avg_height
+    , COALESCE(LAG(avg_height, 1) OVER (ORDER BY year), 172.73)
+    , avg_height -  COALESCE(LAG(avg_height, 1) OVER (ORDER BY year), 172.73) AS height_diff
+FROM summary
+;

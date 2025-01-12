@@ -1,0 +1,7 @@
+SELECT advertising_channel
+FROM uber_advertising
+WHERE customers_acquired > 1500
+GROUP BY advertising_channel
+ORDER BY MAX(money_spent)
+LIMIT 1
+;

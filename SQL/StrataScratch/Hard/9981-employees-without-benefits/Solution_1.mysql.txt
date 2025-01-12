@@ -1,0 +1,7 @@
+SELECT jobtitle
+    , SUM(CASE WHEN totalpaybenefits = totalpay THEN 1 ELSE 0 END) AS num_no_benefits
+    , COUNT(*) AS num_emps
+    , SUM(CASE WHEN totalpaybenefits = totalpay THEN 1 ELSE 0 END) / COUNT(*) AS ratio
+FROM sf_public_salaries
+GROUP BY jobtitle
+ORDER BY jobtitle;

@@ -1,0 +1,6 @@
+SELECT weather
+    , hour
+    , COUNT(*) / (SELECT COUNT(*) FROM lyft_rides)
+FROM lyft_rides
+GROUP BY weather
+    , hour;

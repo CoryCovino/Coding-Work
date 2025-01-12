@@ -1,0 +1,4 @@
+SELECT hour
+    , AVG(travel_distance) AS dist_traveled
+FROM lyft_rides
+GROUP BY hour;

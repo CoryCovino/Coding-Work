@@ -1,0 +1,10 @@
+SELECT SUM(number) AS total
+FROM transportation_numbers
+WHERE `index` < 5
+
+UNION ALL
+
+SELECT SUM(number) AS total
+FROM transportation_numbers
+WHERE `index` > 5
+;

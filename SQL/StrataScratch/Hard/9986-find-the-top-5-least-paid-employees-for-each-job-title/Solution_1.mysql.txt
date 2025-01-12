@@ -1,0 +1,14 @@
+WITH summary AS (
+    SELECT jobtitle
+        , employeename
+        , totalpaybenefits
+        , DENSE_RANK() OVER (PARTITION BY jobtitle ORDER BY totalpaybenefits) AS pay_rank
+    FROM sf_public_salaries
+)
+
+SELECT employeename
+    , jobtitle
+    , totalpaybenefits
+FROM summary
+WHERE pay_rank <= 5
+;

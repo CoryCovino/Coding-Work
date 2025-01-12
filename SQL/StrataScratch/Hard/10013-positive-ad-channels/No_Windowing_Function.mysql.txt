@@ -1,0 +1,18 @@
+WITH summary AS (
+    SELECT advertising_channel
+        , SUM(money_spent) AS spend
+    FROM uber_advertising
+    WHERE customers_acquired > 1500
+    GROUP BY advertising_channel
+)
+
+SELECT advertising_channel
+FROM (
+    SELECT s.advertising_channel
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.spend < s.spend) AS spend_rank
+        FROM summary s
+) a
+WHERE spend_rank = 1
+;

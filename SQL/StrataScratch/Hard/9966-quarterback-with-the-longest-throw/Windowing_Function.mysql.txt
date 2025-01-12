@@ -1,0 +1,10 @@
+SELECT qb
+    , lg
+FROM (
+    SELECT qb
+        , CAST(REGEXP_REPLACE(lg, '[a-zA-Z]', '') AS SIGNED) AS lg
+        , ROW_NUMBER() OVER (ORDER BY CAST(REGEXP_REPLACE(lg, '[a-zA-Z]', '') AS SIGNED) DESC) AS lg_rank
+    FROM qbstats_2015_2016
+) a
+WHERE lg_rank = 1
+;

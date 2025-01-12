@@ -1,0 +1,8 @@
+SELECT taster_name
+    , variety
+    , COUNT(*) AS num_tastings
+FROM winemag_p2
+WHERE taster_name IS NOT NULL
+GROUP BY taster_name
+    , variety
+;

@@ -1,0 +1,6 @@
+SELECT country
+    , COUNT(CASE WHEN designation IS NULL THEN variety ELSE null END) AS no_designation
+    , COUNT(CASE WHEN designation IS NOT NULL THEN variety ELSE null END) AS designation
+    , COUNT(*)
+FROM winemag_p2
+GROUP BY country;

@@ -1,0 +1,5 @@
+SELECT hour
+FROM lyft_rides
+GROUP BY hour
+ORDER BY MAX(gasoline_cost) DESC
+LIMIT 1;

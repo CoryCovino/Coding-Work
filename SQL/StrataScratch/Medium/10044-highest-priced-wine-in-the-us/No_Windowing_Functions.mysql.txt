@@ -1,0 +1,24 @@
+WITH varieties_to_exclude AS (
+    SELECT variety
+    FROM winemag_p1
+    WHERE country IN ('Spain', 'Argentina')
+
+), summary AS (
+    SELECT w.variety
+        , w.country
+        , MAX(price) AS max_price
+        , COUNT(CASE WHEN w.points >= 90 THEN 1 ELSE NULL END) AS gt_90
+        , COUNT(*) AS num_countries
+    FROM winemag_p1 w
+    LEFT OUTER JOIN varieties_to_exclude e ON w.variety = e.variety
+    WHERE e.variety IS NULL
+    GROUP BY w.variety
+    HAVING COUNT(CASE WHEN w.points >= 90 THEN 1 ELSE NULL END) = COUNT(*)
+      AND COUNT(CASE WHEN w.points >= 90 THEN 1 ELSE NULL END) > 0
+)
+
+SELECT variety
+    , max_price
+FROM summary
+WHERE country = 'US'
+;

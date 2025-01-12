@@ -1,0 +1,25 @@
+WITH summary AS (
+    SELECT region_1 AS region
+        , price
+        , variety
+    FROM winemag_p1
+    WHERE price > 0
+      AND region_1 IS NOT NULL
+    
+    UNION
+    
+    SELECT region_2
+        , price
+        , variety
+    FROM winemag_p1
+    WHERE price > 0
+      AND region_2 IS NOT NULL
+) 
+
+SELECT region
+    , variety
+    , SUM(price) AS total
+FROM summary
+GROUP BY region
+    , variety
+ORDER BY SUM(price) DESC;
