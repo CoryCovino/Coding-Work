@@ -1,0 +1,5 @@
+SELECT year
+    , SUM(money_spent) AS money_spent
+    , SUM(customers_acquired) AS customers_acquired
+FROM uber_advertising
+GROUP BY year;

@@ -1,0 +1,14 @@
+SELECT taster_name
+    , variety
+FROM (
+    SELECT taster_name
+        , variety
+        , COUNT(*) AS num_tries
+        , DENSE_RANK() OVER (PARTITION BY taster_name ORDER BY COUNT(*) DESC) AS try_rank
+    FROM winemag_p2
+    WHERE taster_name != ''
+    GROUP BY taster_name
+        , variety
+) a
+WHERE try_rank = 1
+;

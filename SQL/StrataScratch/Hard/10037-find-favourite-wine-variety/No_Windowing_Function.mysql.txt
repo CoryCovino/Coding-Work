@@ -1,0 +1,22 @@
+WITH summary AS (
+    SELECT taster_name
+        , variety
+        , COUNT(*) AS num_tries
+    FROM winemag_p2
+    WHERE taster_name != ''
+    GROUP BY taster_name
+        , variety
+)
+
+SELECT taster_name
+    , variety
+FROM (
+    SELECT *
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.taster_name = s.taster_name
+              AND s2.num_tries > s.num_tries) AS try_rank
+    FROM summary s
+) a
+WHERE try_rank = 1
+;

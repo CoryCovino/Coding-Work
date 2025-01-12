@@ -1,0 +1,13 @@
+SELECT medal
+    , COUNT(CASE WHEN year = 2000 THEN medal ELSE null END) AS medals_2000
+    , COUNT(CASE WHEN year = 2004 THEN medal ELSE null END) AS medals_2004
+    , COUNT(CASE WHEN year = 2008 THEN medal ELSE null END) AS medals_2008
+    , COUNT(CASE WHEN year = 2012 THEN medal ELSE null END) AS medals_2012
+    , COUNT(CASE WHEN year = 2016 THEN medal ELSE null END) AS medals_2016
+    , COUNT(*) AS num_medals
+FROM olympics_athletes_events
+WHERE team = 'China'
+  AND year BETWEEN 2000 AND 2016
+GROUP BY year
+    , medal
+;

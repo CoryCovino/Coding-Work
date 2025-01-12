@@ -1,0 +1,4 @@
+SELECT DISTINCT title
+    , CAST(TRIM(REGEXP_REPLACE(title, '[^0-9]', ' ')) AS UNSIGNED) AS wine_year
+FROM winemag_p2
+WHERE country = 'Macedonia';

@@ -1,0 +1,36 @@
+SELECT CASE WHEN jobtitle LIKE '%police%'
+            THEN 'Police'
+            
+            WHEN jobtitle LIKE '%fire%'
+            THEN 'Firefighter'
+            
+            WHEN jobtitle LIKE '%medical%'
+            THEN 'Medical'
+            
+            ELSE null
+             END AS company
+        , COUNT(*)
+FROM sf_public_salaries
+WHERE CASE WHEN jobtitle LIKE '%police%'
+            THEN 'Police'
+            
+            WHEN jobtitle LIKE '%fire%'
+            THEN 'Firefighter'
+            
+            WHEN jobtitle LIKE '%medical%'
+            THEN 'Medical'
+            
+            ELSE null
+             END IS NOT NULL
+GROUP BY CASE WHEN jobtitle LIKE '%police%'
+            THEN 'Police'
+            
+            WHEN jobtitle LIKE '%fire%'
+            THEN 'Firefighter'
+            
+            WHEN jobtitle LIKE '%medical%'
+            THEN 'Medical'
+            
+            ELSE null
+             END
+;

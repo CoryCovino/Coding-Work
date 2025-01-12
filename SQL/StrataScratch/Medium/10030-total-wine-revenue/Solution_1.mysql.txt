@@ -1,0 +1,8 @@
+SELECT winery
+    , variety
+    , SUM(price) AS total_price
+FROM winemag_p1
+GROUP BY winery
+    , variety
+HAVING SUM(points) / COUNT(*) >= 90
+;

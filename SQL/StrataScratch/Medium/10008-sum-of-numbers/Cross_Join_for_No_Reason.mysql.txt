@@ -1,0 +1,18 @@
+WITH summary AS (
+    SELECT tn1.number AS n1
+    FROM transportation_numbers tn1
+    CROSS JOIN transportation_numbers tn2
+    WHERE tn1.`index` != tn2.`index`
+      AND tn1.`index` < 5
+      AND tn2.`index` > 5
+      AND tn1.`index` <= tn2.`index`
+)
+
+SELECT SUM(DISTINCT n1)
+FROM summary
+
+UNION ALL
+
+SELECT SUM(DISTINCT n1)
+FROM summary
+;

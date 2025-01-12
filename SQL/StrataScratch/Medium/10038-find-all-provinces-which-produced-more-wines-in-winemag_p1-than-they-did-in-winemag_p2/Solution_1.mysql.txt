@@ -1,0 +1,10 @@
+SELECT p1.province
+    , COUNT(p1.id) AS num_wines
+FROM winemag_p1 p1
+GROUP BY p1.province
+HAVING COUNT(p1.id) > (SELECT COUNT(p2.id)
+                        FROM winemag_p2 p2
+                        WHERE p1.province = p2.province
+                        GROUP BY p2.province)
+ORDER BY COUNT(p1.id) DESC
+;

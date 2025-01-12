@@ -1,0 +1,8 @@
+SELECT advertising_channel
+    , year
+    , SUM(money_spent) / SUM(customers_acquired)
+FROM uber_advertising
+WHERE advertising_channel LIKE '%bus%'
+GROUP BY advertising_channel
+    , year
+;

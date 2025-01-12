@@ -1,0 +1,17 @@
+WITH summary AS (
+    SELECT DISTINCT w.variety
+        , w.country
+        , MAX(price) OVER (PARTITION BY w.variety) AS max_price
+        , COUNT(CASE WHEN w.points >= 90 THEN 1 ELSE NULL END) OVER (PARTITION BY w.variety) AS gt_90
+        , COUNT(*) OVER (PARTITION BY w.variety) AS num_countries
+    FROM winemag_p1 w
+    ORDER BY w.variety DESC
+)
+
+SELECT variety
+    , max_price
+FROM summary
+WHERE gt_90 = 1 = num_countries
+  AND gt_90 > 0
+  AND country = 'US'
+;

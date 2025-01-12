@@ -1,0 +1,32 @@
+WITH summary AS (
+    SELECT jobtitle
+        , totalpay
+        , ROW_NUMBER() OVER (PARTITION BY jobtitle ORDER BY totalpay) AS pay_rank
+    FROM sf_public_salaries
+
+), num_rows AS (
+    SELECT jobtitle
+        , MAX(pay_rank) AS max_rank
+    FROM summary
+    GROUP BY jobtitle
+)
+
+SELECT s.jobtitle
+    , AVG(s.totalpay) AS average_pay
+FROM summary s
+INNER JOIN (
+    SELECT jobtitle
+        , CASE WHEN MOD(max_rank, 2) = 1
+               THEN CEILING(max_rank / 2)
+               ELSE max_rank / 2
+                END AS first_row
+        , CASE WHEN MOD(max_rank, 2) = 1
+               THEN CEILING(max_rank / 2)
+               ELSE (max_rank / 2) + 1
+                END AS second_row
+    FROM num_rows
+) nr ON s.jobtitle = nr.jobtitle
+WHERE s.pay_rank IN (nr.first_row, nr.second_row)
+GROUP BY s.jobtitle
+ORDER BY AVG(s.totalpay) DESC
+;

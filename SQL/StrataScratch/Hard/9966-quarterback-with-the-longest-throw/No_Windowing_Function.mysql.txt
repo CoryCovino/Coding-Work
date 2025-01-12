@@ -1,0 +1,17 @@
+WITH summary AS (
+    SELECT qb
+        , CAST(REGEXP_REPLACE(lg, '[a-zA-Z]', '') AS SIGNED) AS lg
+    FROM qbstats_2015_2016
+)
+
+SELECT qb
+    , lg
+FROM (
+    SELECT s1.*
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE s2.lg > s1.lg) AS lg_rank
+    FROM summary s1
+) a
+WHERE lg_rank = 1
+;

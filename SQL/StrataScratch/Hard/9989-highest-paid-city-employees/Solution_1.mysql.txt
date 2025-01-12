@@ -1,0 +1,22 @@
+WITH summary AS (
+    SELECT jobtitle
+        , employeename
+        , pay_rank
+    FROM (
+        SELECT employeename
+            , jobtitle
+            , totalpaybenefits
+            , ROW_NUMBER() OVER (PARTITION BY jobtitle ORDER BY totalpaybenefits DESC) AS pay_rank
+        FROM sf_public_salaries
+    ) a
+    WHERE pay_rank <= 2
+)
+
+SELECT s1.jobtitle
+    , s1.employeename AS num_1
+    , s2.employeename AS num_2
+FROM summary s1
+LEFT OUTER JOIN summary s2 ON s1.jobtitle = s2.jobtitle
+                          AND s2.pay_rank = 2
+WHERE s1.pay_rank = 1
+;

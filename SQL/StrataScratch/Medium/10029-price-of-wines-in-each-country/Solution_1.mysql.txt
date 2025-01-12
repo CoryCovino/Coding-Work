@@ -1,0 +1,18 @@
+WITH summary AS (
+    SELECT country
+        , price
+    FROM winemag_p1
+    
+    UNION ALL
+    
+    SELECT country
+        , price
+    FROM winemag_p2
+)
+
+SELECT country
+    , MIN(price) AS min_price
+    , AVG(price) AS avg_price
+    , MAX(price) AS max_price
+FROM summary
+GROUP BY country;

@@ -1,0 +1,10 @@
+SELECT DISTINCT t1.number
+    , t2.number
+    , t3.number
+FROM transportation_numbers t1
+CROSS JOIN transportation_numbers t2
+CROSS JOIN transportation_numbers t3
+WHERE t1.number != t2.number
+  AND t2.number != t3.number
+  AND t1.number != t3.number
+  AND t1.number + t2.number + t3.number = 8;

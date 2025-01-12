@@ -1,0 +1,4 @@
+SELECT DISTINCT variety
+FROM winemag_p1
+WHERE price >= 5 
+  AND price <= 20;

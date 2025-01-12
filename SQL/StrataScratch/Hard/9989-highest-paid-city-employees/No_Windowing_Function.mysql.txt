@@ -1,0 +1,27 @@
+WITH summary AS (
+    SELECT employeename
+        , jobtitle
+        , totalpaybenefits
+    FROM sf_public_salaries
+
+), ranks AS (
+    SELECT jobtitle
+        , employeename
+        , (SELECT COUNT(*) + 1
+            FROM summary s2
+            WHERE (s2.jobtitle = s1.jobtitle
+              AND s2.totalpaybenefits > s1.totalpaybenefits)
+               OR (s2.jobtitle = s1.jobtitle
+                  AND s2.totalpaybenefits = s1.totalpaybenefits
+                  AND s2.employeename > s1.employeename)) AS pay_rank
+    FROM summary s1
+)
+
+SELECT r1.jobtitle
+    , r1.employeename AS num_1
+    , r2.employeename AS num_2
+FROM ranks r1
+LEFT OUTER JOIN ranks r2 ON r1.jobtitle = r2.jobtitle
+                        AND r2.pay_rank = 2
+WHERE r1.pay_rank = 1
+;

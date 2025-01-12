@@ -1,0 +1,7 @@
+SELECT DISTINCT t1.number
+    , t2.number
+FROM transportation_numbers t1
+INNER JOIN transportation_numbers t2 ON t1.index != t2.index
+WHERE t1.number < t2.number
+  AND t1.number * t2.number > 11
+;

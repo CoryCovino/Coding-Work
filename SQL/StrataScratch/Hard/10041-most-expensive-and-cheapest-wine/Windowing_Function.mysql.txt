@@ -1,0 +1,31 @@
+WITH summary AS (
+    SELECT DISTINCT region_1 AS region
+        , variety
+        , price
+        , CASE WHEN price = MIN(price) OVER (PARTITION BY region_1) THEN 1 ELSE 0 END AS cheapest
+        , CASE WHEN price = MAX(price) OVER (PARTITION BY region_1) THEN 1 ELSE 0 END AS costly
+    FROM winemag_p1
+    
+    UNION
+    
+    SELECT DISTINCT region_2 AS region
+        , variety
+        , price
+        , CASE WHEN price = MIN(price) OVER (PARTITION BY region_2) THEN 1 ELSE 0 END AS cheapest
+        , CASE WHEN price = MAX(price) OVER (PARTITION BY region_2) THEN 1 ELSE 0 END AS costly
+    FROM winemag_p1
+
+), varieties AS (
+    SELECT *
+    FROM summary w
+    WHERE region IS NOT NULL
+    
+)
+
+SELECT region
+    , MAX(CASE WHEN cheapest = 1 THEN variety ELSE NULL END) AS cheapest
+    , MAX(CASE WHEN costly = 1 THEN variety ELSE NULL END) AS most_expensive
+FROM varieties
+WHERE cheapest = 1 OR costly = 1
+GROUP BY region
+;

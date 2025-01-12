@@ -1,0 +1,22 @@
+WITH summary AS (
+    SELECT CASE WHEN jobtitle LIKE '%police%'
+                THEN 'Police'
+                
+                WHEN jobtitle LIKE '%fire%'
+                THEN 'Firefighter'
+                
+                WHEN jobtitle LIKE '%medical%'
+                THEN 'Medical'
+                
+                ELSE null
+                 END AS company
+            , id
+    FROM sf_public_salaries
+)
+
+SELECT company
+    , COUNT(*)
+FROM summary
+WHERE company IS NOT NULL
+GROUP BY company
+;

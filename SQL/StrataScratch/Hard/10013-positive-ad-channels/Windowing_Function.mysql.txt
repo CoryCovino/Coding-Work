@@ -1,0 +1,11 @@
+SELECT advertising_channel
+FROM (
+    SELECT advertising_channel
+        , MAX(customers_acquired) AS customers_acquired
+        , DENSE_RANK() OVER (ORDER BY MAX(money_spent)) AS spend_rank
+    FROM uber_advertising
+    WHERE customers_acquired > 1500
+    GROUP BY advertising_channel
+) a
+WHERE spend_rank = 1
+;

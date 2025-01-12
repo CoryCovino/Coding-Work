@@ -1,0 +1,10 @@
+SELECT country
+    , region_1
+    , COUNT(DISTINCT winery)
+FROM winemag_p1
+WHERE province != 'Spain'
+  AND description LIKE '%blackberry%'
+  AND LOWER(winery) LIKE '%bodega%'
+GROUP BY country
+    , region_1
+;

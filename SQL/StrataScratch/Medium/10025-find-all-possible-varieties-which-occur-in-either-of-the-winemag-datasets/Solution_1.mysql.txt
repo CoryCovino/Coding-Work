@@ -1,0 +1,11 @@
+SELECT variety
+FROM (
+    SELECT DISTINCT variety
+    FROM winemag_p1
+    
+    UNION
+    
+    SELECT DISTINCT variety
+    FROM winemag_p2
+) a
+ORDER BY variety;

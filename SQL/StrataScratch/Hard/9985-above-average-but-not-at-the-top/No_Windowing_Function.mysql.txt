@@ -1,0 +1,26 @@
+WITH avgs AS (
+    SELECT jobtitle
+        , AVG(totalpay) AS avg_pay
+    FROM sf_public_salaries
+    WHERE year = 2013
+    GROUP BY jobtitle
+
+), summary AS (
+    SELECT s1.employeename
+        , s1.totalpay
+        , s1.jobtitle
+        , (SELECT COUNT(DISTINCT s2.totalpay)
+            FROM sf_public_salaries s2
+            WHERE s2.jobtitle = s1.jobtitle
+              AND s2.totalpay >= s1.totalpay
+              AND s2.year = s1.year) AS pay_rank
+    FROM sf_public_salaries s1
+    WHERE s1.year = 2013
+)
+
+SELECT s.employeename
+FROM summary s
+INNER JOIN avgs a ON a.jobtitle = s.jobtitle
+                 AND s.totalpay > a.avg_pay
+WHERE s.pay_rank > 5
+;
